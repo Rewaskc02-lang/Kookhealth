@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KookHealth — Scan Food & See Nutrition</title>
+  <meta name="description" content="Upload a photo of your meal and instantly see its calorie count, macros breakdown, and health tags powered by AI." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Animated gradient border on upload zone */
+    .upload-zone { outline: none; }
+    .upload-zone:focus { box-shadow: 0 0 0 3px hsl(from var(--c-primary) h s l / 0.22) !important; }
+
+    /* Nutrient card accent colours (theme-independent) */
+    .nc-protein { border-color: #BFDBFE !important; }
+    .nc-protein .nutrient-icon { filter: hue-rotate(200deg); }
+    .nc-protein .nutrient-val  { color: #1D4ED8; }
+    .nc-carbs   { border-color: #FDE68A !important; }
+    .nc-carbs   .nutrient-val  { color: #D97706; }
+    .nc-fat     { border-color: #FECACA !important; }
+    .nc-fat     .nutrient-val  { color: #DC2626; }
+    .nc-fiber   { border-color: #A7F3D0 !important; }
+    .nc-fiber   .nutrient-val  { color: #059669; }
+    .nc-sugar   { border-color: #FBCFE8 !important; }
+    .nc-sugar   .nutrient-val  { color: #DB2777; }
+
+    /* Preview card label strip */
+    .preview-label {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+      padding: 20px 24px 16px;
+      color: white;
+    }
+    .preview-label h3 { margin: 0; font-size: 1.1rem; font-weight: 800; }
+    .preview-label p  { margin: 4px 0 0; font-size: 13px; opacity: 0.8; }
+
+    .webcam-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 22px;
+      border-radius: var(--r-pill);
+      font-size: 14px; font-weight: 700;
+      cursor: pointer;
+      border: 1.5px solid var(--c-border);
+      background: var(--c-surf);
+      color: var(--c-muted);
+      font-family: inherit;
+      transition: all 0.2s ease !important;
+    }
+    .webcam-btn:hover { border-color: var(--c-primary); color: var(--c-primary); background: var(--c-primary-l); }
+
+    /* Diary saved list */
+    .diary-saved {
+      display: none;
+      background: hsl(142,50%,95%);
+      border: 1.5px solid hsl(142,50%,72%);
+      border-radius: var(--r-lg);
+      padding: 18px 20px;
+      display: none;
+      align-items: center;
+      gap: 12px;
+      margin-top: 24px;
+      font-size: 14px;
+      font-weight: 700;
+      color: hsl(142,50%,25%);
+    }
+    .diary-saved.show { display: flex; }
+    .diary-saved svg { width: 22px; height: 22px; stroke: hsl(142,50%,35%); fill: none; stroke-width: 2.2; flex-shrink: 0; }
+
+    /* Demo hint */
+    .demo-hint {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--c-surf2);
+      border: 1px solid var(--c-border);
+      border-radius: var(--r-md);
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--c-muted);
+      font-weight: 500;
+      margin-top: 16px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar" aria-label="Main navigation">
+  <div class="container navbar-inner">
+    <a href="index.html" class="navbar-logo" aria-label="KookHealth home">
+      <div class="logo-icon" aria-hidden="true">🥦</div>
+      <span class="logo-text">KookHealth</span>
+    </a>
+    <div class="navbar-nav">
+      <a href="index.html"       class="nav-link" data-page="home">Home</a>
+      <a href="ingredients.html" class="nav-link" data-page="ingredients">Ingredients</a>
+      <a href="scan.html"        class="nav-link" data-page="scan">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        Scan Food
+      </a>
+      <a href="saved.html" class="nav-link" data-page="saved">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        Saved Recipes
+        <span class="nav-badge" data-saved-count id="nav-saved-count">0</span>
+      </a>
+    </div>
+    <div class="navbar-right">
+      <div class="theme-toggle" id="theme-toggle" role="switch" aria-checked="false" tabindex="0" aria-label="Toggle colour theme">
+        <span class="theme-icon">🌅</span>
+        <div class="t-track" aria-hidden="true"><div class="t-knob"></div></div>
+        <span class="theme-icon">🌿</span>
+        <span class="theme-label">Warm</span>
+      </div>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Open navigation menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</nav>
+<div class="mobile-nav" id="mobile-nav">
+  <a href="index.html"       class="nav-link" data-page="home">🏠 Home</a>
+  <a href="ingredients.html" class="nav-link" data-page="ingredients">🧺 Ingredients</a>
+  <a href="scan.html"        class="nav-link" data-page="scan">📷 Scan Food</a>
+  <a href="saved.html"       class="nav-link" data-page="saved">🔖 Saved Recipes</a>
+</div>
+
+<!-- PAGE HERO -->
+<section class="page-hero" aria-label="Food scanner header">
+  <div class="container">
+    <div class="page-hero-icon" aria-hidden="true">📷</div>
+    <h1>Scan Your Food</h1>
+    <p>Upload a photo of any meal. Our AI identifies what it is and shows you a complete nutritional breakdown instantly.</p>
+  </div>
+</section>
+
+<!-- MAIN CONTENT -->
+<main>
+  <section class="section">
+    <div class="container">
+      <div class="scan-layout">
+
+        <!-- ── Upload Zone ── -->
+        <div id="upload-zone"
+             class="upload-zone"
+             role="button"
+             tabindex="0"
+             aria-label="Upload food photo — click or drag and drop an image here">
+          <div class="upload-icon" aria-hidden="true">🍽️</div>
+          <h3>Drop your food photo here</h3>
+          <p>Upload any meal photo and we'll instantly identify it and show you its full nutritional breakdown</p>
+          <div class="upload-actions">
+            <button class="btn btn-primary btn-lg" id="upload-btn" type="button" aria-label="Choose photo from device">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              Upload Photo
+            </button>
+            <button class="webcam-btn" id="webcam-btn" type="button" aria-label="Use webcam to take photo">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+              Take Photo
+            </button>
+          </div>
+          <input type="file" id="file-input" accept="image/*" capture="environment" aria-label="Choose image file" />
+          <div class="demo-hint" aria-live="polite">
+            💡 <span>Try it with any food photo — JPEG, PNG, or WEBP. Max 20 MB.</span>
+          </div>
+        </div>
+
+        <!-- ── Preview + Analyzing ── -->
+        <div class="preview-section" id="preview-section" aria-live="polite">
+
+          <div class="preview-card">
+            <div class="preview-img-wrap" role="img" aria-label="Uploaded food image">
+              <img id="preview-img" src="" alt="Uploaded food photo" />
+
+              <!-- Scanning overlay -->
+              <div class="analyzing-overlay" id="analyzing-overlay" aria-label="Analyzing food image">
+                <div class="scan-line" aria-hidden="true"></div>
+                <div class="analyze-spinner" role="progressbar" aria-label="AI analysis in progress"></div>
+                <div class="ai-scanning-text">
+                  <p>Analyzing your food with AI<span class="analyzing-dots"></span></p>
+                  <span class="ai-scanning-sub">✨ Identifying nutrients &amp; macros</span>
+                </div>
+              </div>
+            </div>
+            <div class="preview-label" aria-hidden="true">
+              <h3 id="preview-food-name">Analyzing your food…</h3>
+              <p>📍 KookHealth AI Scanner</p>
+            </div>
+          </div>
+
+          <!-- Demo use-existing button -->
+          <div style="text-align:center;margin-bottom:16px;">
+            <button class="btn btn-ghost btn-sm" id="scan-another-top" type="button">
+              ← Try another photo
+            </button>
+          </div>
+
+        </div>
+
+        <!-- ── Error Banner ── -->
+        <div class="error-banner" id="scan-error-banner" role="alert">
+          <span class="error-icon">⚠️</span>
+          <div style="flex:1;">
+            <span class="error-msg">Couldn&rsquo;t analyze this image. Try a clearer or closer photo.</span>
+            <span id="scan-error-detail" style="display:none;font-size:12px;color:var(--c-muted);font-weight:500;margin-top:3px;line-height:1.4;"></span>
+          </div>
+          <button class="error-retry" id="scan-retry-btn" type="button">↺ Try Again</button>
+        </div>
+
+        <!-- ── Nutrition Results ── -->
+        <div class="nutrition-results" id="nutrition-results" aria-label="Nutrition analysis results">
+
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
+            <div class="detected-food-tag">🤖 AI Detected Food</div>
+            <span class="ai-badge">✨ AI Generated</span>
+          </div>
+          <h2 class="detected-food-name" id="food-name">Detected Food</h2>
+
+          <!-- Calories card -->
+          <div class="calorie-card" role="region" aria-label="Calorie count">
+            <div class="calorie-num" id="cal-num">?</div>
+            <div class="calorie-unit">kcal</div>
+            <div class="calorie-label">Total Calories per Serving</div>
+          </div>
+
+          <!-- Nutrition grid -->
+          <div class="nutrition-grid" role="list" aria-label="Nutritional breakdown">
+            <div class="nutrient-card nc-protein" role="listitem">
+              <div class="nutrient-icon">🍖</div>
+              <div class="nutrient-val">?</div>
+              <div class="nutrient-lbl">Protein</div>
+            </div>
+            <div class="nutrient-card nc-carbs" role="listitem">
+              <div class="nutrient-icon">🌾</div>
+              <div class="nutrient-val">?</div>
+              <div class="nutrient-lbl">Carbs</div>
+            </div>
+            <div class="nutrient-card nc-fat" role="listitem">
+              <div class="nutrient-icon">🥑</div>
+              <div class="nutrient-val">?</div>
+              <div class="nutrient-lbl">Fat</div>
+            </div>
+            <div class="nutrient-card nc-fiber" role="listitem">
+              <div class="nutrient-icon">🌿</div>
+              <div class="nutrient-val">?</div>
+              <div class="nutrient-lbl">Fiber</div>
+            </div>
+            <div class="nutrient-card nc-sugar" role="listitem">
+              <div class="nutrient-icon">🫐</div>
+              <div class="nutrient-val">?</div>
+              <div class="nutrient-lbl">Sugar</div>
+            </div>
+          </div>
+
+          <!-- Health tags -->
+          <div class="health-tags" aria-label="Health classification tags">
+            <span class="health-tag">AI analysis pending</span>
+          </div>
+
+          <!-- Diary saved banner (hidden until saved) -->
+          <div class="diary-saved" id="diary-saved" aria-live="polite">
+            <svg viewBox="0 0 24 24"><path d="m5 12 5 5L20 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Saved to your food diary! Track your daily nutrition.</span>
+          </div>
+
+          <!-- Action buttons -->
+          <div class="scan-actions" style="margin-top:24px;">
+            <button class="btn btn-primary btn-lg" id="save-diary-btn" aria-label="Save this scan to your diary">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v14a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+              Save to Diary
+            </button>
+            <button class="btn btn-ghost btn-lg" id="scan-another-btn" aria-label="Scan a different food photo">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+              Scan Another
+            </button>
+            <a href="recipe.html?id=chicken_salad&from=scan" class="btn btn-outline btn-lg" aria-label="View full recipe for this food">
+              📖 View Full Recipe
+            </a>
+          </div>
+
+        </div>
+
+        <!-- ── How it works ── -->
+        <div id="how-it-works" style="margin-top:56px;">
+          <h2 style="font-size:1.5rem;font-weight:900;letter-spacing:-0.04em;text-align:center;margin-bottom:32px;">How It Works</h2>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;" class="how-grid">
+            <div style="text-align:center;padding:32px 20px;background:var(--c-surf);border-radius:var(--r-lg);border:1.5px solid var(--c-border);">
+              <div style="font-size:40px;margin-bottom:14px;">📸</div>
+              <h3 style="font-size:1rem;font-weight:800;margin:0 0 8px;">Upload a Photo</h3>
+              <p style="font-size:14px;color:var(--c-muted);margin:0;line-height:1.55;">Snap a picture of your meal or upload from your gallery. Any angle works!</p>
+            </div>
+            <div style="text-align:center;padding:32px 20px;background:var(--c-surf);border-radius:var(--r-lg);border:1.5px solid var(--c-border);">
+              <div style="font-size:40px;margin-bottom:14px;">🤖</div>
+              <h3 style="font-size:1rem;font-weight:800;margin:0 0 8px;">AI Analyses</h3>
+              <p style="font-size:14px;color:var(--c-muted);margin:0;line-height:1.55;">Our nutrition AI identifies your food and calculates macros in under 3 seconds.</p>
+            </div>
+            <div style="text-align:center;padding:32px 20px;background:var(--c-surf);border-radius:var(--r-lg);border:1.5px solid var(--c-border);">
+              <div style="font-size:40px;margin-bottom:14px;">📊</div>
+              <h3 style="font-size:1rem;font-weight:800;margin:0 0 8px;">Get Your Breakdown</h3>
+              <p style="font-size:14px;color:var(--c-muted);margin:0;line-height:1.55;">See calories, protein, carbs, fat, fibre, and health tags — then save to your diary.</p>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /.scan-layout -->
+    </div>
+  </section>
+</main>
+
+<!-- FOOTER -->
+<footer class="footer" aria-label="Site footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="navbar-logo" style="margin-bottom:0">
+          <div class="logo-icon" style="background:rgba(255,255,255,0.12);box-shadow:none;" aria-hidden="true">🥦</div>
+          <span class="logo-text">KookHealth</span>
+        </div>
+        <p>Discover healthy, delicious recipes based on what's already in your kitchen.</p>
+      </div>
+      <div class="footer-col"><h4>Explore</h4><ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="ingredients.html">Find by Ingredients</a></li>
+        <li><a href="scan.html">Scan Food</a></li>
+        <li><a href="saved.html">Saved Recipes</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Categories</h4><ul>
+        <li><a href="ingredients.html">Breakfast</a></li>
+        <li><a href="ingredients.html">Vegan</a></li>
+        <li><a href="ingredients.html">Quick Meals</a></li>
+        <li><a href="ingredients.html">Desserts</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>About</h4><ul>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 KookHealth. Made with ❤️ for home cooks everywhere.</p>
+      <p>🌿 Eat fresh. Cook smart. Live healthy.</p>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="app.js"></script>
+<script>
+  initPage('scan');
+
+  /* ── Element refs ── */
+  const uploadZone      = document.getElementById('upload-zone');
+  const fileInput       = document.getElementById('file-input');
+  const uploadBtn       = document.getElementById('upload-btn');
+  const webcamBtn       = document.getElementById('webcam-btn');
+  const previewSection  = document.getElementById('preview-section');
+  const previewImg      = document.getElementById('preview-img');
+  const analyzingOvlay  = document.getElementById('analyzing-overlay');
+  const nutritionResult = document.getElementById('nutrition-results');
+  const howItWorks      = document.getElementById('how-it-works');
+  const saveDiaryBtn    = document.getElementById('save-diary-btn');
+  const scanAnotherBtn  = document.getElementById('scan-another-btn');
+  const scanAnotherTop  = document.getElementById('scan-another-top');
+  let lastScanBase64    = null;
+  let lastScanMimeType  = null;
+
+  /* ── Upload button ── */
+  uploadBtn.addEventListener('click', () => fileInput.click());
+
+  /* ── Webcam / take photo (mobile) ── */
+  webcamBtn.addEventListener('click', () => {
+    fileInput.setAttribute('capture', 'environment');
+    fileInput.click();
+  });
+
+  /* ── File input change ── */
+  fileInput.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (file && file.type.startsWith('image/')) processFile(file);
+    fileInput.value = ''; // reset so same file can be re-selected
+  });
+
+  /* ── Drag and drop ── */
+  uploadZone.addEventListener('dragover', e => {
+    e.preventDefault();
+    uploadZone.classList.add('drag-over');
+  });
+  uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
+  uploadZone.addEventListener('drop', e => {
+    e.preventDefault();
+    uploadZone.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) processFile(file);
+  });
+  uploadZone.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInput.click(); }
+  });
+
+  /* ── Process file ── */
+  function processFile(file) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const dataUrl = e.target.result;
+      const base64 = dataUrl.split(',')[1];
+      const mimeType = file.type || 'image/jpeg';
+
+      lastScanBase64 = base64;
+      lastScanMimeType = mimeType;
+
+      previewImg.src = dataUrl;
+      showPreview();
+      startAnalysis(base64, mimeType);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function showPreview() {
+    uploadZone.style.display      = 'none';
+    howItWorks.style.display      = 'none';
+    previewSection.style.display  = 'block';
+    nutritionResult.classList.remove('show');
+    analyzingOvlay.classList.remove('hidden');
+    document.getElementById('preview-food-name').textContent = 'Analyzing your food…';
+  }
+
+  const API_BASE = 'http://localhost:3001';
+
+  function setScanErrorDetail(detail) {
+    const detailEl = document.getElementById('scan-error-detail');
+    if (!detailEl) return;
+    detailEl.textContent = detail || '';
+    detailEl.style.display = detail ? 'block' : 'none';
+  }
+
+  async function startAnalysis(base64, mimeType) {
+    setScanErrorDetail('');
+
+    if (!base64 || !mimeType) { showScanError(); return; }
+
+    try {
+      const response = await fetch(`${API_BASE}/api/scan-food`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ image: base64, mimeType }),
+      });
+
+      if (!response.ok) {
+        let errJson = {};
+        try { errJson = await response.json(); } catch {}
+        const error = new Error(errJson.error || `Server ${response.status}`);
+        error.detail = errJson.detail;
+        throw error;
+      }
+
+      const data = await response.json();
+      if (data.error) {
+        const error = new Error(data.error);
+        error.detail = data.detail;
+        throw error;
+      }
+      revealResults(data);
+
+    } catch (err) {
+      console.error('Scan error:', err);
+      setScanErrorDetail(err.detail);
+      showScanError();
+    }
+  }
+
+  function showScanError() {
+    analyzingOvlay.classList.add('hidden');
+    document.getElementById('scan-error-banner').classList.add('show');
+    showToast('⚠️ Analysis failed — please try again.');
+  }
+
+  /* ── Retry button ── */
+  document.getElementById('scan-retry-btn').addEventListener('click', () => {
+    document.getElementById('scan-error-banner').classList.remove('show');
+    setScanErrorDetail('');
+    analyzingOvlay.classList.remove('hidden');
+    startAnalysis(lastScanBase64, lastScanMimeType);
+  });
+
+  function revealResults(data) {
+    analyzingOvlay.classList.add('hidden');
+
+    /* Populate detected food name */
+    const foodName = data.foodName || 'Detected Food';
+    document.getElementById('preview-food-name').textContent = foodName;
+    document.getElementById('food-name').textContent = foodName;
+    document.getElementById('cal-num').textContent = data.calories ?? '?';
+
+    const macroCards = nutritionResult.querySelectorAll('.nutrient-card');
+    const setMacro = (index, value) => {
+      const el = macroCards[index]?.querySelector('.nutrient-val');
+      if (!el || value == null) return;
+      const match = String(value).trim().match(/^([\d.]+)\s*([a-zA-Z%]+)?$/);
+      el.textContent = '';
+      if (match) {
+        el.append(document.createTextNode(match[1]));
+        const unit = document.createElement('span');
+        unit.className = 'nutrient-unit';
+        unit.textContent = match[2] || '';
+        el.append(unit);
+      } else {
+        el.textContent = String(value);
+      }
+    };
+    setMacro(0, data.protein);
+    setMacro(1, data.carbs);
+    setMacro(2, data.fat);
+    setMacro(3, data.fiber);
+    setMacro(4, data.sugar);
+
+    const healthTags = nutritionResult.querySelector('.health-tags');
+    if (healthTags) {
+      const tags = [data.healthTag, ...(Array.isArray(data.healthNotes) ? data.healthNotes.slice(0, 3) : [])]
+        .filter(Boolean);
+      healthTags.textContent = '';
+      tags.forEach((tag, index) => {
+        const el = document.createElement('span');
+        el.className = `health-tag${index === 0 ? ' green' : ''}`;
+        el.textContent = tag;
+        healthTags.append(el);
+      });
+    }
+
+    nutritionResult.classList.add('show');
+    nutritionResult.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    showToast(`✅ Analysis complete — ${data.calories ?? '?'} kcal detected!`);
+  }
+
+  /* ── Save to diary ── */
+  saveDiaryBtn.addEventListener('click', () => {
+    saveDiaryBtn.innerHTML = `
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5L20 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Saved to Diary`;
+    saveDiaryBtn.style.background = 'linear-gradient(135deg, hsl(142,50%,42%), hsl(160,40%,38%))';
+    saveDiaryBtn.style.boxShadow  = '0 8px 26px rgba(50,160,90,0.40)';
+    saveDiaryBtn.disabled = true;
+    document.getElementById('diary-saved').classList.add('show');
+    showToast('📊 Scan saved to your food diary!');
+  });
+
+  /* ── Scan another ── */
+  function resetScanner() {
+    uploadZone.style.display     = '';
+    howItWorks.style.display     = '';
+    previewSection.style.display = 'none';
+    nutritionResult.classList.remove('show');
+    lastScanBase64 = null;
+    lastScanMimeType = null;
+    document.getElementById('diary-saved').classList.remove('show');
+    saveDiaryBtn.disabled = false;
+    saveDiaryBtn.style.background = '';
+    saveDiaryBtn.style.boxShadow  = '';
+    saveDiaryBtn.innerHTML = `
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v14a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      Save to Diary`;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  scanAnotherBtn.addEventListener('click', resetScanner);
+  scanAnotherTop.addEventListener('click', resetScanner);
+
+  /* ── How-it-works grid responsive ── */
+  const howGrid = document.querySelector('.how-grid');
+  function adjustHowGrid() {
+    if (window.innerWidth < 640) howGrid.style.gridTemplateColumns = '1fr';
+    else if (window.innerWidth < 900) howGrid.style.gridTemplateColumns = '1fr 1fr';
+    else howGrid.style.gridTemplateColumns = 'repeat(3, 1fr)';
+  }
+  adjustHowGrid();
+  window.addEventListener('resize', adjustHowGrid);
+</script>
+</body>
+</html>

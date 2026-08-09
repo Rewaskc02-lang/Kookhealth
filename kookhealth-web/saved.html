@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KookHealth — Saved Recipes</title>
+  <meta name="description" content="Your personally saved healthy recipes, all in one place. Access anytime, anywhere." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .saved-grid-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .saved-count-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background: var(--c-tag-bg);
+      color: var(--c-tag-txt);
+      border-radius: var(--r-pill);
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .clear-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: var(--r-pill);
+      border: 1.5px solid var(--c-border);
+      background: var(--c-surf);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--c-muted);
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s ease !important;
+    }
+    .clear-btn:hover { border-color: #EF4444; color: #EF4444; background: #FEF2F2; }
+
+    /* Save indicator on card (bookmark icon overlay) */
+    .recipe-card .saved-marker {
+      position: absolute;
+      top: 12px; right: 12px;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: var(--shadow-sm);
+    }
+    .recipe-card .saved-marker svg {
+      width: 15px; height: 15px;
+      stroke: var(--c-primary);
+      fill: var(--c-primary);
+      stroke-width: 1.5;
+    }
+
+    /* Explore section */
+    .explore-more {
+      background: var(--gradient-hero);
+      border-radius: var(--r-xl);
+      padding: 48px 40px;
+      text-align: center;
+      border: 1.5px solid var(--c-border);
+    }
+    .explore-more h2 {
+      font-size: 1.6rem; font-weight: 900;
+      letter-spacing: -0.04em; color: var(--c-text);
+      margin: 0 0 10px;
+    }
+    .explore-more p {
+      font-size: 15px; color: var(--c-muted);
+      margin: 0 0 24px; line-height: 1.6;
+    }
+    .explore-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar" aria-label="Main navigation">
+  <div class="container navbar-inner">
+    <a href="index.html" class="navbar-logo" aria-label="KookHealth home">
+      <div class="logo-icon" aria-hidden="true">🥦</div>
+      <span class="logo-text">KookHealth</span>
+    </a>
+    <div class="navbar-nav">
+      <a href="index.html"       class="nav-link" data-page="home">Home</a>
+      <a href="ingredients.html" class="nav-link" data-page="ingredients">Ingredients</a>
+      <a href="scan.html"        class="nav-link" data-page="scan">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        Scan Food
+      </a>
+      <a href="saved.html" class="nav-link" data-page="saved">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        Saved Recipes
+        <span class="nav-badge" data-saved-count id="nav-saved-count">0</span>
+      </a>
+    </div>
+    <div class="navbar-right">
+      <div class="theme-toggle" id="theme-toggle" role="switch" aria-checked="false" tabindex="0" aria-label="Toggle colour theme">
+        <span class="theme-icon">🌅</span>
+        <div class="t-track" aria-hidden="true"><div class="t-knob"></div></div>
+        <span class="theme-icon">🌿</span>
+        <span class="theme-label">Warm</span>
+      </div>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Open navigation menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</nav>
+<div class="mobile-nav" id="mobile-nav">
+  <a href="index.html"       class="nav-link" data-page="home">🏠 Home</a>
+  <a href="ingredients.html" class="nav-link" data-page="ingredients">🧺 Ingredients</a>
+  <a href="scan.html"        class="nav-link" data-page="scan">📷 Scan Food</a>
+  <a href="saved.html"       class="nav-link" data-page="saved">🔖 Saved Recipes</a>
+</div>
+
+<!-- PAGE HERO -->
+<section class="page-hero" aria-label="Saved recipes header">
+  <div class="container">
+    <div class="page-hero-icon" aria-hidden="true">🔖</div>
+    <h1>Saved Recipes</h1>
+    <p>Your personal recipe collection — all your favourites saved in one place, ready whenever you are.</p>
+  </div>
+</section>
+
+<!-- MAIN CONTENT -->
+<main>
+  <section class="section">
+    <div class="container">
+
+      <!-- ── Non-empty state ── -->
+      <div id="saved-content" style="display:none;">
+        <div class="saved-grid-header">
+          <div>
+            <span class="saved-count-badge" id="saved-count-badge">
+              🔖 <span id="saved-count-text">0 recipes saved</span>
+            </span>
+          </div>
+          <button class="clear-btn" id="clear-all-btn" aria-label="Remove all saved recipes">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+            Clear All
+          </button>
+        </div>
+        <div class="recipe-grid" id="saved-grid" role="list" aria-label="Your saved recipes"></div>
+      </div>
+
+      <!-- ── Empty state ── -->
+      <div id="empty-state" class="empty-state" aria-label="No saved recipes">
+        <span class="empty-emoji" aria-hidden="true">🍽️</span>
+        <h3>No saved recipes yet</h3>
+        <p>
+          Start exploring and save recipes you love — they'll appear here so you can come back to them anytime.
+        </p>
+        <div class="explore-actions" style="justify-content:center;">
+          <a href="index.html" class="btn btn-primary btn-lg" aria-label="Browse recipes on home page">
+            🏠 Browse Recipes
+          </a>
+          <a href="ingredients.html" class="btn btn-ghost btn-lg" aria-label="Find recipes by ingredients">
+            🧺 Search by Ingredients
+          </a>
+        </div>
+      </div>
+
+      <!-- ── Explore more (always visible below) ── -->
+      <div id="explore-section" style="margin-top:56px;">
+        <div class="explore-more" aria-label="Explore more">
+          <div style="font-size:44px;margin-bottom:14px;">✨</div>
+          <h2>Discover More Recipes</h2>
+          <p>Find new healthy meals based on what you already have in your kitchen, or scan food to see its nutritional breakdown.</p>
+          <div class="explore-actions">
+            <a href="ingredients.html" class="btn btn-primary btn-lg" aria-label="Find recipes by ingredients">
+              🧺 Find by Ingredients
+            </a>
+            <a href="scan.html" class="btn btn-ghost btn-lg" aria-label="Scan your food">
+              📷 Scan Food
+            </a>
+            <a href="index.html" class="btn btn-outline btn-lg" aria-label="Browse all recipes">
+              🍳 All Recipes
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<!-- FOOTER -->
+<footer class="footer" aria-label="Site footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="navbar-logo" style="margin-bottom:0">
+          <div class="logo-icon" style="background:rgba(255,255,255,0.12);box-shadow:none;" aria-hidden="true">🥦</div>
+          <span class="logo-text">KookHealth</span>
+        </div>
+        <p>Discover healthy, delicious recipes based on what's already in your kitchen.</p>
+      </div>
+      <div class="footer-col"><h4>Explore</h4><ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="ingredients.html">Find by Ingredients</a></li>
+        <li><a href="scan.html">Scan Food</a></li>
+        <li><a href="saved.html">Saved Recipes</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Categories</h4><ul>
+        <li><a href="ingredients.html">Breakfast</a></li>
+        <li><a href="ingredients.html">Vegan</a></li>
+        <li><a href="ingredients.html">Quick Meals</a></li>
+        <li><a href="ingredients.html">Desserts</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>About</h4><ul>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 KookHealth. Made with ❤️ for home cooks everywhere.</p>
+      <p>🌿 Eat fresh. Cook smart. Live healthy.</p>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="app.js"></script>
+<script>
+  initPage('saved');
+
+  function renderSaved() {
+    const savedRecipes = getSavedRecipes();
+    const content    = document.getElementById('saved-content');
+    const emptyState = document.getElementById('empty-state');
+    const grid       = document.getElementById('saved-grid');
+    const countText  = document.getElementById('saved-count-text');
+
+    if (savedRecipes.length === 0) {
+      content.style.display    = 'none';
+      emptyState.style.display = 'block';
+      return;
+    }
+
+    content.style.display    = 'block';
+    emptyState.style.display = 'none';
+    countText.textContent    = `${savedRecipes.length} recipe${savedRecipes.length > 1 ? 's' : ''} saved`;
+
+    /* Render cards with a bookmark overlay */
+    grid.innerHTML = savedRecipes.map(recipe => {
+      const card = recipeCardHTML(recipe, 'saved');
+      // Inject bookmark marker into the card image div
+      return card.replace(
+        '<span class="recipe-card-tag">',
+        `<div class="saved-marker" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div>
+        <span class="recipe-card-tag">`
+      );
+    }).join('');
+
+    /* Float-in animation */
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('float-up'), i * 70);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    grid.querySelectorAll('.recipe-card').forEach(card => observer.observe(card));
+  }
+
+  /* ── Clear all ── */
+  document.getElementById('clear-all-btn').addEventListener('click', () => {
+    if (!confirm('Remove all saved recipes? This cannot be undone.')) return;
+    localStorage.setItem('kookhealth-saved', '[]');
+    updateNavBadge();
+    renderSaved();
+    showToast('🗑️ All saved recipes cleared');
+  });
+
+  /* ── Initial render ── */
+  renderSaved();
+</script>
+</body>
+</html>

@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KookHealth — Recipe Detail</title>
+  <meta name="description" content="Detailed recipe with ingredients, step-by-step instructions, and nutritional info." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .recipe-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .recipe-tag-pill {
+      padding: 5px 12px;
+      border-radius: var(--r-pill);
+      font-size: 12px;
+      font-weight: 700;
+      background: var(--c-tag-bg);
+      color: var(--c-tag-txt);
+    }
+    .rating-row { display: flex; align-items: center; gap: 6px; }
+    .rating-stars { display: flex; gap: 2px; }
+    .rating-stars svg { width: 16px; height: 16px; }
+    .rating-count { font-size: 14px; color: var(--c-muted); font-weight: 600; }
+    .save-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+    .share-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 12px 20px;
+      border-radius: var(--r-pill);
+      border: 1.5px solid var(--c-border);
+      background: var(--c-surf);
+      font-size: 14px; font-weight: 700;
+      color: var(--c-muted);
+      cursor: pointer;
+      transition: all 0.2s ease !important;
+    }
+    .share-btn:hover { border-color: var(--c-primary); color: var(--c-primary); }
+    .progress-bar {
+      height: 6px;
+      background: var(--c-bg2);
+      border-radius: var(--r-pill);
+      overflow: hidden;
+      margin-top: 4px;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--gradient-btn);
+      border-radius: var(--r-pill);
+      transition: width 0.6s ease !important;
+    }
+    .ing-progress {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      padding: 10px 16px;
+      background: var(--c-surf2);
+      border-radius: var(--r-md);
+      border: 1px solid var(--c-border);
+    }
+    .ing-progress-lbl { font-size: 13px; font-weight: 700; color: var(--c-muted); }
+    .ing-progress-count { font-size: 13px; font-weight: 800; color: var(--c-primary); }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar" aria-label="Main navigation">
+  <div class="container navbar-inner">
+    <a href="index.html" class="navbar-logo" aria-label="KookHealth home">
+      <div class="logo-icon" aria-hidden="true">🥦</div>
+      <span class="logo-text">KookHealth</span>
+    </a>
+    <div class="navbar-nav">
+      <a href="index.html"       class="nav-link" data-page="home">Home</a>
+      <a href="ingredients.html" class="nav-link" data-page="ingredients">Ingredients</a>
+      <a href="scan.html"        class="nav-link" data-page="scan">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        Scan Food
+      </a>
+      <a href="saved.html" class="nav-link" data-page="saved">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        Saved Recipes
+        <span class="nav-badge" data-saved-count id="nav-saved-count">0</span>
+      </a>
+    </div>
+    <div class="navbar-right">
+      <div class="theme-toggle" id="theme-toggle" role="switch" aria-checked="false" tabindex="0" aria-label="Toggle colour theme">
+        <span class="theme-icon">🌅</span>
+        <div class="t-track" aria-hidden="true"><div class="t-knob"></div></div>
+        <span class="theme-icon">🌿</span>
+        <span class="theme-label">Warm</span>
+      </div>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Open navigation menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</nav>
+<div class="mobile-nav" id="mobile-nav">
+  <a href="index.html"       class="nav-link" data-page="home">🏠 Home</a>
+  <a href="ingredients.html" class="nav-link" data-page="ingredients">🧺 Ingredients</a>
+  <a href="scan.html"        class="nav-link" data-page="scan">📷 Scan Food</a>
+  <a href="saved.html"       class="nav-link" data-page="saved">🔖 Saved Recipes</a>
+</div>
+
+<main>
+  <div class="container" id="recipe-container" style="padding-top:40px;padding-bottom:60px;">
+
+    <!-- Breadcrumb + back -->
+    <nav class="breadcrumb" aria-label="Breadcrumb" id="breadcrumb">
+      <a href="index.html">Home</a>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span id="breadcrumb-parent">Recipes</span>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span id="breadcrumb-current" aria-current="page">Loading…</span>
+    </nav>
+
+    <!-- Hero: Image + Info -->
+    <div class="recipe-detail-hero" id="recipe-hero">
+      <!-- Populated by JS -->
+    </div>
+
+    <!-- Body: Ingredients + Steps -->
+    <div class="recipe-body" id="recipe-body">
+      <!-- Populated by JS -->
+    </div>
+
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer class="footer" aria-label="Site footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="navbar-logo" style="margin-bottom:0">
+          <div class="logo-icon" style="background:rgba(255,255,255,0.12);box-shadow:none;" aria-hidden="true">🥦</div>
+          <span class="logo-text">KookHealth</span>
+        </div>
+        <p>Discover healthy, delicious recipes based on what's already in your kitchen.</p>
+      </div>
+      <div class="footer-col"><h4>Explore</h4><ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="ingredients.html">Find by Ingredients</a></li>
+        <li><a href="scan.html">Scan Food</a></li>
+        <li><a href="saved.html">Saved Recipes</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Categories</h4><ul>
+        <li><a href="ingredients.html">Breakfast</a></li>
+        <li><a href="ingredients.html">Vegan</a></li>
+        <li><a href="ingredients.html">Quick Meals</a></li>
+        <li><a href="ingredients.html">Desserts</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>About</h4><ul>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 KookHealth. Made with ❤️ for home cooks everywhere.</p>
+      <p>🌿 Eat fresh. Cook smart. Live healthy.</p>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="app.js"></script>
+<script>
+  initPage(null);
+
+  const id      = getParam('id');
+  const from    = getParam('from') || 'home';
+  const isAI    = getParam('ai') === '1';
+
+  /* ── Resolve recipe data ── */
+  let recipe;
+  let aiData = null;
+
+  if (isAI && !id) {
+    // AI-generated recipe stored in sessionStorage
+    try {
+      aiData = JSON.parse(sessionStorage.getItem('kookhealth-ai-recipe') || 'null');
+    } catch {}
+  }
+
+  if (aiData) {
+    // Map Gemini shape → internal shape
+    recipe = {
+      id:          'ai-generated',
+      title:       aiData.recipeName || 'AI Generated Recipe',
+      description: `A unique recipe crafted just for you using: ${(aiData._ingredients || []).join(', ')}.`,
+      img:         'hero_recipe.png', // placeholder
+      alt:         aiData.recipeName,
+      tags:        aiData.tags || ['AI Recipe'],
+      prep:        aiData.cookingTime || '—',
+      cook:        aiData.cookingTime || '—',
+      serve:       aiData.servings   || '—',
+      cal:         aiData.calories   || '—',
+      difficulty:  aiData.difficulty || '—',
+      rating:      '5.0',
+      reviews:     '1',
+      ingredients: (aiData.ingredients || []).map(i => ({
+        name:   i.item     || i.name     || '',
+        amount: i.quantity || i.amount   || '',
+      })),
+      steps: aiData.steps || [],
+    };
+  } else {
+    recipe = RECIPES[id] || RECIPES['hero'];
+  }
+
+  /* ── Breadcrumb ── */
+  const fromLabel  = { home: 'Popular Recipes', ingredients: 'Ingredient Search', saved: 'Saved Recipes' };
+  const fromHref   = { home: 'index.html', ingredients: 'ingredients.html', saved: 'saved.html' };
+  document.getElementById('breadcrumb-current').textContent = recipe.title;
+  const parentEl = document.getElementById('breadcrumb-parent');
+  parentEl.innerHTML = `<a href="${fromHref[from] || 'index.html'}">${fromLabel[from] || 'Recipes'}</a>`;
+  document.title = `KookHealth — ${recipe.title}`;
+
+  /* ── Save state ── */
+  const recipeId = recipe.id || id || 'hero';
+  let saved = isRecipeSaved(recipeId);
+
+  /* ── Rating stars HTML ── */
+  function starsHTML(rating) {
+    const full = Math.floor(parseFloat(rating));
+    return Array.from({length: 5}, (_, i) =>
+      `<svg viewBox="0 0 24 24" fill="${i < full ? 'var(--c-star)' : 'none'}" stroke="var(--c-star)" stroke-width="1.5">
+        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+      </svg>`).join('');
+  }
+
+  /* ── Render hero ── */
+  document.getElementById('recipe-hero').innerHTML = `
+    <div class="recipe-detail-image">
+      <img src="${recipe.img}" alt="${recipe.alt}" />
+    </div>
+    <div class="recipe-detail-info">
+      <div class="recipe-tags" style="align-items:center;">
+        ${recipe.tags.map(t => `<span class="recipe-tag-pill">${t}</span>`).join('')}
+        ${getParam('ai') === '1' ? '<span class="ai-badge">&#10024; AI Generated</span>' : ''}
+      </div>
+      <h1 class="recipe-detail-title animate-title">${recipe.title}</h1>
+      <p class="recipe-detail-desc">${recipe.description}</p>
+      <div class="rating-row">
+        <div class="rating-stars" aria-label="${recipe.rating} out of 5 stars">${starsHTML(recipe.rating)}</div>
+        <span class="rating-count">⭐ ${recipe.rating} · ${recipe.reviews} reviews</span>
+      </div>
+      <div class="recipe-meta-grid">
+        <div class="recipe-meta-card">
+          <span class="meta-icon">⏱️</span>
+          <span class="meta-val">${recipe.prep}</span>
+          <span class="meta-lbl">Prep Time</span>
+        </div>
+        <div class="recipe-meta-card">
+          <span class="meta-icon">🔥</span>
+          <span class="meta-val">${recipe.cook}</span>
+          <span class="meta-lbl">Cook Time</span>
+        </div>
+        <div class="recipe-meta-card">
+          <span class="meta-icon">👥</span>
+          <span class="meta-val">${recipe.serve}</span>
+          <span class="meta-lbl">Servings</span>
+        </div>
+        <div class="recipe-meta-card">
+          <span class="meta-icon">💪</span>
+          <span class="meta-val">${recipe.cal}</span>
+          <span class="meta-lbl">kcal/serving</span>
+        </div>
+      </div>
+      <div class="save-row">
+        <button class="btn btn-primary btn-lg ${saved ? 'save-btn-saved' : ''}" id="save-btn"
+          aria-label="${saved ? 'Recipe saved' : 'Save this recipe'}"
+          aria-pressed="${saved}">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" ${saved ? 'fill="white"' : ''}/>
+          </svg>
+          ${saved ? '✓ Saved' : 'Save Recipe'}
+        </button>
+        <button class="share-btn" id="share-btn" aria-label="Share recipe">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+            <path d="m8.59 13.51 6.83 3.98M15.41 6.51 8.59 10.49"/>
+          </svg>
+          Share
+        </button>
+      </div>
+    </div>`;
+
+  /* ── Render body ── */
+  let checkedCount = 0;
+  const total = recipe.ingredients.length;
+
+  function ingItemHTML(ing, index) {
+    return `<div class="ingredient-item" data-index="${index}" role="checkbox" aria-checked="false" tabindex="0" aria-label="${ing.amount} ${ing.name}">
+      <div class="ing-checkbox">
+        <svg viewBox="0 0 24 24"><path d="m5 12 5 5L20 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <span class="ing-name">${ing.name}</span>
+      <span class="ing-amount">${ing.amount}</span>
+    </div>`;
+  }
+
+  document.getElementById('recipe-body').innerHTML = `
+    <div>
+      <h2 class="recipe-section-title">
+        <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/></svg>
+        Ingredients
+      </h2>
+      <div class="ing-progress">
+        <span class="ing-progress-lbl">Check off as you go</span>
+        <span class="ing-progress-count" id="ing-progress-count">0 / ${total}</span>
+      </div>
+      <div class="progress-bar" aria-label="Ingredient progress">
+        <div class="progress-fill" id="progress-fill" style="width:0%" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
+      <div style="margin-top:12px;" id="ing-list">
+        ${recipe.ingredients.map((ing, i) => ingItemHTML(ing, i)).join('')}
+      </div>
+    </div>
+    <div>
+      <h2 class="recipe-section-title">
+        <svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+        Instructions
+      </h2>
+      <div id="steps-list">
+        ${recipe.steps.map((step, i) => `
+          <div class="step-item stagger-item" style="--stagger:${i}" aria-label="Step ${i+1}">
+            <div class="step-num" aria-hidden="true">${i+1}</div>
+            <p class="step-text">${step}</p>
+          </div>`).join('')}
+      </div>
+    </div>`;
+
+  /* ── Ingredient checkbox ── */
+  document.getElementById('ing-list').addEventListener('click', e => {
+    const item = e.target.closest('.ingredient-item');
+    if (!item) return;
+    toggleIngredientCheck(item);
+  });
+  document.getElementById('ing-list').addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      const item = e.target.closest('.ingredient-item');
+      if (item) toggleIngredientCheck(item);
+    }
+  });
+
+  function toggleIngredientCheck(item) {
+    const checked = item.classList.toggle('checked');
+    item.setAttribute('aria-checked', checked);
+    checkedCount += checked ? 1 : -1;
+    const pct = Math.round((checkedCount / total) * 100);
+    document.getElementById('ing-progress-count').textContent = `${checkedCount} / ${total}`;
+    const fill = document.getElementById('progress-fill');
+    fill.style.width = pct + '%';
+    fill.setAttribute('aria-valuenow', pct);
+    if (checkedCount === total) showToast('🎉 All ingredients checked — ready to cook!');
+  }
+
+  /* ── Save button ── */
+  document.getElementById('save-btn').addEventListener('click', () => {
+    saved = !saved;
+    const btn = document.getElementById('save-btn');
+    if (saved) {
+      saveRecipeId(recipeId);
+      btn.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" fill="white"/></svg> ✓ Saved`;
+      btn.classList.add('save-btn-saved');
+      btn.setAttribute('aria-pressed', 'true');
+      showToast('🔖 Recipe saved to your collection!');
+    } else {
+      unsaveRecipeId(recipeId);
+      btn.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg> Save Recipe`;
+      btn.classList.remove('save-btn-saved');
+      btn.setAttribute('aria-pressed', 'false');
+      showToast('Removed from saved recipes');
+    }
+    updateNavBadge();
+  });
+
+  /* ── Share button ── */
+  document.getElementById('share-btn').addEventListener('click', async () => {
+    const url = window.location.href;
+    if (navigator.share) {
+      try { await navigator.share({ title: recipe.title, url }); }
+      catch {}
+    } else {
+      navigator.clipboard.writeText(url).then(() => showToast('🔗 Link copied to clipboard!'));
+    }
+  });
+</script>
+</body>
+</html>
