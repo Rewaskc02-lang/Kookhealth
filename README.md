@@ -118,9 +118,35 @@ npm start
 The server runs at `http://localhost:3001`.
 
 **4. Open the frontend**
-Open `kookhealth-web/index.html` in a browser (or serve the folder with any
-static file server). The frontend is already configured to call the backend
-at `http://localhost:3001`.
+Open `http://localhost:3001/` after starting the backend. Express serves the
+static files from `kookhealth-web`, so the same server provides both the
+frontend and the `/api/*` endpoints.
+
+## Deploying to Render
+
+This repo includes `render.yaml` for a single Render Web Service. The service
+installs the backend dependencies, starts `kookhealth-backend/server.js`, and
+serves the frontend from `kookhealth-web`.
+
+1. Push this repository to GitHub.
+2. In Render, create a new Blueprint from the repo, or create a Web Service
+   using these values:
+
+```text
+Runtime: Node
+Build Command: npm install --prefix kookhealth-backend
+Start Command: npm start --prefix kookhealth-backend
+Health Check Path: /health
+```
+
+3. Add this environment variable in Render:
+
+```text
+GEMINI_API_KEY=your_real_gemini_api_key
+```
+
+Render provides the `PORT` environment variable automatically. The app binds
+to `0.0.0.0` and uses that port, which is required for Render Web Services.
 
 ## Security Notes
 

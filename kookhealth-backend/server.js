@@ -7,8 +7,10 @@ require('dotenv').config();
 const express = require('express');
 const cors    = require('cors');
 const fetch   = require('node-fetch');
+const path    = require('path');
 
 const app = express();
+const WEB_DIR = path.join(__dirname, '..', 'kookhealth-web');
 
 /* ── Middleware ── */
 app.use(cors());
@@ -214,10 +216,15 @@ app.get('/health', (_req, res) =>
   res.json({ status: 'ok', service: 'kookhealth-api', model: GEMINI_MODEL })
 );
 
+/* ── Static frontend ── */
+app.use(express.static(WEB_DIR));
+
 /* ── Start ── */
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
+const HOST = '0.0.0.0';
+app.listen(PORT, HOST, () => {
   console.log(`\n🥦 KookHealth API running → http://localhost:${PORT}`);
+  console.log(`   Serving web from: ${WEB_DIR}`);
   console.log(`   GEMINI_API_KEY : ${process.env.GEMINI_API_KEY ? '✅ loaded' : '❌ MISSING — add to .env'}`);
   console.log(`   Using Gemini model: ${GEMINI_MODEL}\n`);
 });

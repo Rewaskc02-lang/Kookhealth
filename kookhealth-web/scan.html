@@ -427,7 +427,9 @@
     document.getElementById('preview-food-name').textContent = 'Analyzing your food…';
   }
 
-  const API_BASE = 'http://localhost:3001';
+  const API_BASE = ['localhost', '127.0.0.1', ''].includes(window.location.hostname)
+    ? 'http://localhost:3001'
+    : window.location.origin;
 
   function setScanErrorDetail(detail) {
     const detailEl = document.getElementById('scan-error-detail');

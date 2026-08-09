@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: kookhealth
+    runtime: node
+    plan: free
+    buildCommand: npm install --prefix kookhealth-backend
+    startCommand: npm start --prefix kookhealth-backend
+    healthCheckPath: /health
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-2.5-flash
