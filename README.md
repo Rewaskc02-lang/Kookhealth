@@ -115,7 +115,7 @@ PORT=3001
 ```bash
 npm start
 ```
-The server runs at `http://localhost:3001`.
+The server runs at `https://cookhealth.onrender.com`.
 
 **4. Open the frontend**
 Open `http://localhost:3001/` after starting the backend. Express serves the
