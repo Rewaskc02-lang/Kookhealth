@@ -1,16 +1,16 @@
 /* ============================================================
-   KOOKHEALTH — SHARED APP.JS
-   Recipe data, theme management, saved recipes, 3D tilt & nav utilities
+   KookHealth — Shared Application Logic & Vector Icon Engine
    ============================================================ */
 
-/* ── RECIPE DATA ──────────────────────────────────────── */
+/* ── SHARED RECIPE DATABASE ────────────────────────────── */
 const RECIPES = {
   hero: {
     id: 'hero',
     title: 'Avocado Toast & Poached Egg',
-    description: 'Farm-fresh ingredients come together in this vibrant, protein-packed breakfast. Creamy avocado on sourdough with a perfectly runny poached egg.',
-    img: 'hero_recipe.png', alt: 'Avocado toast with poached egg and fresh salad',
-    tag: 'Featured', tags: ['Healthy', 'Quick', 'Vegetarian'],
+    tag: 'Breakfast',
+    img: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=800&auto=format&fit=crop&q=80',
+    alt: 'Crispy sourdough avocado toast with a golden runny poached egg',
+    desc: 'Golden toasted sourdough topped with seasoned smashed avocado, a perfectly soft-poached farm egg, red pepper flakes, fresh dill, and flaky sea salt.',
     prep: '5m', cook: '10m', serve: '2', cal: '320',
     rating: '4.9', reviews: '342',
     ingredients: [
@@ -24,19 +24,20 @@ const RECIPES = {
       { name: 'Sea salt & pepper', amount: 'to taste' },
     ],
     steps: [
-      'Toast the sourdough slices until golden-brown and perfectly crispy on both sides.',
-      'Mash avocado with lemon juice, salt, and chili flakes until creamy. Spread generously on each slice.',
-      'Bring a small pot of water to a gentle simmer and add the white vinegar.',
-      'Crack each egg into a ramekin. Create a whirlpool in the water and slide the egg in. Poach for 3 minutes until white is set but yolk still runny.',
-      'Place the poached egg on avocado toast. Season with sea salt, black pepper, extra chili flakes, and fresh dill.',
+      'Toast sourdough slices in a skillet with a drop of olive oil until golden and crisp on both sides.',
+      'Cut avocado in half, remove pit, and scoop into a bowl. Mash with lemon juice, salt, and pepper.',
+      'Bring 3 inches of water to a gentle simmer in a medium pot. Add white vinegar and stir to create a gentle vortex.',
+      'Crack eggs one at a time into a ramekin, then slide into the centre of the vortex. Poach for 3–4 minutes for a runny yolk.',
+      'Spread generous mashed avocado onto warm toast, top each with a poached egg, sprinkle with chili flakes and fresh dill, and serve immediately.',
     ],
   },
-  breakfast: {
-    id: 'breakfast',
-    title: 'Greek Scrambled Eggs',
-    description: 'Silky soft scrambled eggs loaded with crumbled feta, fresh herbs, and served alongside toasted whole-grain bread. A Mediterranean morning classic.',
-    img: 'recipe_breakfast.png', alt: 'Greek scrambled eggs with avocado and toast',
-    tag: 'Breakfast', tags: ['Breakfast', 'High Protein'],
+  shakshuka: {
+    id: 'shakshuka',
+    title: 'Mediterranean Shakshuka',
+    tag: 'Breakfast',
+    img: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?w=800&auto=format&fit=crop&q=80',
+    alt: 'Mediterranean Shakshuka skillet with eggs and feta cheese',
+    desc: 'North African poached eggs nestled in a rich, spiced tomato and sweet bell pepper sauce, finished with crumbled creamy feta and fresh cilantro.',
     prep: '5m', cook: '15m', serve: '2', cal: '410',
     rating: '4.8', reviews: '124',
     ingredients: [
@@ -51,18 +52,19 @@ const RECIPES = {
     ],
     steps: [
       'Whisk eggs with milk, salt, and pepper in a bowl until pale and airy — at least 60 seconds.',
-      'Melt butter in a non-stick pan over low-medium heat until foamy.',
-      'Pour in egg mixture. Gently fold with a silicone spatula every 20–30 seconds. Do not rush.',
-      'Remove from heat while eggs are still slightly wet — residual heat finishes them perfectly.',
-      'Fold in crumbled feta. Serve on toasted bread with halved cherry tomatoes and fresh chives.',
+      'Melt butter in a non-stick pan over very low heat. Pour in whisked eggs.',
+      'Slowly sweep a spatula across the bottom in long, slow figure-8s until soft, creamy curds form (about 4–5 minutes).',
+      'Remove from heat just before fully set. Fold in crumbled feta gently.',
+      'Plate alongside blistered cherry tomatoes and warm toasted whole grain bread. Scatter fresh chives on top.',
     ],
   },
-  vegan: {
-    id: 'vegan',
-    title: 'Rainbow Buddha Bowl',
-    description: 'A nourishing, colourful bowl of roasted chickpeas, quinoa, fresh vegetables, and creamy tahini dressing. Fully plant-based and endlessly satisfying.',
-    img: 'recipe_vegan_bowl.png', alt: 'Vegan chickpea quinoa buddha bowl',
-    tag: 'Vegan', tags: ['Vegan', 'High Protein', 'Gluten-Free'],
+  'buddha-bowl': {
+    id: 'buddha-bowl',
+    title: 'Rainbow Quinoa Buddha Bowl',
+    tag: 'Vegan',
+    img: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&auto=format&fit=crop&q=80',
+    alt: 'Colorful nutrient-rich quinoa buddha bowl with tahini drizzle',
+    desc: 'Nutrient-dense tricolour quinoa loaded with roasted spiced chickpeas, creamy avocado, crisp red cabbage, juicy tomatoes, and a velvet lemon-tahini dressing.',
     prep: '10m', cook: '15m', serve: '2', cal: '480',
     rating: '4.9', reviews: '267',
     ingredients: [
@@ -78,19 +80,20 @@ const RECIPES = {
     ],
     steps: [
       'Cook quinoa per package directions. Fluff with a fork and let cool slightly.',
-      'Toss chickpeas with olive oil, cumin, and smoked paprika. Roast at 200°C for 20 minutes until golden and crispy.',
-      'Slice avocado, cucumber, and tomatoes. Finely shred the red cabbage.',
-      'Whisk tahini with lemon juice, 2 tbsp water, one minced garlic clove, and a pinch of salt until silky.',
-      'Assemble bowls: quinoa base, arrange toppings in colourful sections, drizzle tahini generously, finish with sesame seeds.',
+      'Toss drained chickpeas with olive oil, smoked paprika, cumin, and sea salt. Roast at 200°C (400°F) for 15 minutes until crunchy.',
+      'Thinly slice cucumber, cabbage, avocado, and halve cherry tomatoes.',
+      'Whisk tahini with lemon juice, warm water, and garlic powder until smooth and pourable.',
+      'Assemble bowls: quinoa base, arrange toppings in vibrant sections, drizzle with tahini, and sprinkle black sesame seeds.',
     ],
   },
-  smoothie: {
-    id: 'smoothie',
-    title: 'Berry Smoothie Bowl',
-    description: 'A thick, vibrant blended base of frozen berries topped with crunchy granola, fresh fruit, chia seeds, and mint. Ready in under 10 minutes.',
-    img: 'recipe_smoothie.png', alt: 'Berry smoothie bowl with granola and fresh fruit',
-    tag: 'Quick', tags: ['Quick', 'Vegan', 'Breakfast'],
-    prep: '5m', cook: '5m', serve: '1', cal: '280',
+  'smoothie-bowl': {
+    id: 'smoothie-bowl',
+    title: 'Berry Açai Protein Bowl',
+    tag: 'Quick',
+    img: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?w=800&auto=format&fit=crop&q=80',
+    alt: 'Thick berry smoothie bowl with fresh fruit and crunchy granola',
+    desc: 'Thick and velvety blended frozen wild berries and coconut milk, topped with artisanal granola, chia seeds, fresh blueberries, and mint.',
+    prep: '5m', cook: '0m', serve: '1', cal: '290',
     rating: '4.7', reviews: '98',
     ingredients: [
       { name: 'Frozen mixed berries', amount: '1½ cups' },
@@ -104,18 +107,19 @@ const RECIPES = {
     ],
     steps: [
       'Blend frozen berries and banana with just enough coconut milk to blend — keep it very thick!',
-      'Pour into a wide, chilled bowl immediately.',
-      'Arrange granola, sliced strawberries, and blueberries in separate sections on top.',
-      'Scatter chia seeds evenly and add fresh mint leaves for garnish.',
-      'Serve immediately and enjoy before it melts!',
+      'Pour the deep purple smoothie base into a chilled wide bowl.',
+      'Arrange granola in a neat stripe down the center.',
+      'Fan out sliced strawberries and scatter fresh blueberries alongside.',
+      'Dust with chia seeds, garnish with fresh mint sprig, and enjoy immediately.',
     ],
   },
-  pasta: {
-    id: 'pasta',
-    title: 'Tomato Pappardelle',
-    description: 'Rustic Italian comfort food at its finest. Wide pappardelle pasta tossed in a slow-simmered San Marzano tomato sauce with fresh basil and Parmesan.',
-    img: 'recipe_pasta.png', alt: 'Tomato pappardelle pasta with basil and parmesan',
-    tag: 'Pasta', tags: ['Italian', 'Comfort', 'Family'],
+  pappardelle: {
+    id: 'pappardelle',
+    title: 'San Marzano Basil Pappardelle',
+    tag: 'Pasta',
+    img: 'https://images.unsplash.com/photo-1621996346565-e3d5d6281057?w=800&auto=format&fit=crop&q=80',
+    alt: 'Handmade wide ribbon pappardelle with slow-simmered tomato basil sauce',
+    desc: 'Silky wide ribbons of egg pasta tossed in a slow-simmered crushed San Marzano tomato sauce, fragrant with sweet basil, garlic, and aged Parmigiano Reggiano.',
     prep: '5m', cook: '30m', serve: '4', cal: '520',
     rating: '4.6', reviews: '183',
     ingredients: [
@@ -130,18 +134,19 @@ const RECIPES = {
     ],
     steps: [
       'Warm olive oil over medium-low heat. Add sliced garlic and chili flakes — cook until fragrant, about 2 minutes. Do not brown.',
-      'Pour in white wine and let reduce for 1 minute.',
-      'Crush San Marzano tomatoes by hand into the pan. Simmer uncovered for 20 minutes, stirring occasionally.',
-      'Cook pappardelle in heavily salted boiling water until al dente. Reserve ½ cup pasta water before draining.',
-      'Toss pasta into the sauce with a splash of pasta water. Plate with torn fresh basil and generous Parmesan shavings.',
+      'Pour in crushed San Marzano tomatoes and white wine. Season with salt. Simmer gently for 25 minutes until rich and reduced.',
+      'Boil pappardelle in generously salted water until 1 minute shy of al dente.',
+      'Transfer pasta directly into sauce with ¼ cup pasta water. Toss vigorously over heat for 1 minute to emulsify.',
+      'Tear in fresh basil, drizzle with raw extra virgin olive oil, and finish with generous shavings of Parmigiano.',
     ],
   },
-  chicken_salad: {
-    id: 'chicken_salad',
-    title: 'Grilled Chicken Greek Salad',
-    description: 'Perfectly grilled herb-marinated chicken over a bed of crisp romaine, vibrant vegetables, crumbled feta, and Kalamata olives with a bright lemon dressing.',
-    img: 'recipe_chicken_salad.png', alt: 'Grilled chicken Greek salad with feta and olives',
-    tag: 'Salad', tags: ['High Protein', 'Low Carb', 'Fresh'],
+  'chicken-salad': {
+    id: 'chicken-salad',
+    title: 'Crisp Herb Chicken Salad',
+    tag: 'Salads',
+    img: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&auto=format&fit=crop&q=80',
+    alt: 'Grilled herb marinated chicken breast over crisp garden greens',
+    desc: 'Tender lemon-herb grilled chicken breast over crisp Romaine, cucumbers, Kalamata olives, juicy tomatoes, and feta, finished with cold-pressed olive oil.',
     prep: '10m', cook: '15m', serve: '2', cal: '360',
     rating: '4.8', reviews: '211',
     ingredients: [
@@ -155,11 +160,11 @@ const RECIPES = {
       { name: 'Lemon & olive oil dressing', amount: '3 tbsp' },
     ],
     steps: [
-      'Marinate chicken with olive oil, lemon zest, dried oregano, salt, and pepper for at least 10 minutes.',
-      'Grill chicken on a screaming-hot grill pan — 6 minutes per side. Rest 5 minutes before slicing.',
-      'Tear romaine into a large bowl. Halve the tomatoes, slice the cucumber and red onion thinly.',
-      'Combine all vegetables in the bowl. Drizzle with lemon-olive oil dressing and toss gently.',
-      'Top with sliced grilled chicken, crumbled feta, and olives. Serve immediately.',
+      'Marinate chicken in lemon juice, oregano, garlic, salt, and olive oil for 10 minutes.',
+      'Grill on medium-high for 6–7 minutes per side until golden charred and juices run clear. Rest 5 minutes, then slice.',
+      'Chop Romaine, slice cucumber, halve cherry tomatoes, and thinly slice red onion.',
+      'Toss greens with half the dressing in a large bowl.',
+      'Top with warm sliced chicken, olives, and crumbled feta. Drizzle remaining dressing and serve.',
     ],
   },
 };
@@ -186,7 +191,10 @@ function toggleTheme() {
   const next = current === 'earthy' ? 'warm' : 'earthy';
   localStorage.setItem(THEME_KEY, next);
   applyTheme(next);
-  showToast(next === 'earthy' ? '🍃 Earthy mode activated' : '🌅 Warm mode activated', next === 'earthy' ? '🌿' : '✨');
+  const iconSvg = next === 'earthy'
+    ? `<svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>`
+    : `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>`;
+  showToast(next === 'earthy' ? 'Earthy Botanical Mode' : 'Warm Terracotta Mode', iconSvg);
 }
 
 /* ── SAVED RECIPES ────────────────────────────────────── */
@@ -228,9 +236,9 @@ function updateNavBadge() {
   });
 }
 
-/* ── TOAST NOTIFICATIONS ──────────────────────────────── */
+/* ── TOAST NOTIFICATIONS (No emojis, vector SVG) ──────── */
 let _toastTimer = null;
-function showToast(msg, icon = '') {
+function showToast(msg, iconSvg = '') {
   let toast = document.getElementById('toast');
   if (!toast) {
     toast = document.createElement('div');
@@ -238,7 +246,8 @@ function showToast(msg, icon = '') {
     toast.className = 'toast';
     document.body.appendChild(toast);
   }
-  toast.innerHTML = (icon ? `<span style="font-size:16px;">${icon}</span>` : '') + `<span>${msg}</span>`;
+  const defaultIcon = `<svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`;
+  toast.innerHTML = (iconSvg || defaultIcon) + `<span>${msg}</span>`;
   toast.classList.add('show');
   if (_toastTimer) clearTimeout(_toastTimer);
   _toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
@@ -260,13 +269,25 @@ function initHamburger() {
     const open = mobileNav.classList.toggle('open');
     burger.setAttribute('aria-expanded', open);
   });
-  // Close on outside click
   document.addEventListener('click', e => {
     if (!burger.contains(e.target) && !mobileNav.contains(e.target)) {
       mobileNav.classList.remove('open');
       burger.setAttribute('aria-expanded', 'false');
     }
   });
+}
+
+/* ── STICKY NAV SCROLL LISTENER ───────────────────────── */
+function initNavScroll() {
+  const navbar = document.getElementById('navbar');
+  if (!navbar) return;
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 40) {
+      navbar.classList.add('compact');
+    } else {
+      navbar.classList.remove('compact');
+    }
+  }, { passive: true });
 }
 
 /* ── INIT PAGE ────────────────────────────────────────── */
@@ -277,18 +298,38 @@ function initPage(page) {
   const themeToggle = document.getElementById('theme-toggle');
   if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
   initHamburger();
-  // Visual enhancements & 3D tilt
-  requestAnimationFrame(() => {
-    initVisuals();
-    init3DTilt();
+  initNavScroll();
+  initScrollReveal();
+}
+
+/* ── SCROLL REVEAL VIA INTERSECTION OBSERVER ──────────── */
+function initScrollReveal() {
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReduced) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        entry.target.style.transition = 'opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1), transform 0.6s cubic-bezier(0.34, 1.4, 0.64, 1)';
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.recipe-card, .cat-pill, .ing-panel, .nutrient-card').forEach((el, i) => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(24px)';
+    setTimeout(() => observer.observe(el), i * 40);
   });
 }
 
-/* ── RECIPE CARD HTML ─────────────────────────────────── */
+/* ── RECIPE CARD HTML (CRAV Poster Card, Vector SVGs) ─── */
 function recipeCardHTML(recipe, fromPage = 'home') {
   return `
     <a href="recipe.html?id=${recipe.id}&from=${fromPage}"
-       class="recipe-card tilt-card"
+       class="recipe-card"
        aria-label="${recipe.title}, ${recipe.cook} cook time">
       <div class="recipe-card-img">
         <img src="${recipe.img}" alt="${recipe.alt}" loading="lazy" />
@@ -297,16 +338,16 @@ function recipeCardHTML(recipe, fromPage = 'home') {
       <div class="recipe-card-body">
         <h3 class="recipe-card-title">${recipe.title}</h3>
         <div class="recipe-card-meta">
-          <span class="recipe-meta-item">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          <span class="recipe-meta-item" aria-label="Cook time ${recipe.cook}">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
             ${recipe.cook}
           </span>
-          <span class="recipe-meta-item">
-            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-            ${recipe.serve} servings
+          <span class="recipe-meta-item" aria-label="${recipe.serve} servings">
+            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            ${recipe.serve} Servings
           </span>
-          <span class="recipe-rating" style="margin-left:auto">
-            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <span class="recipe-rating" style="margin-left:auto" aria-label="Rating ${recipe.rating}">
+            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
             <span>${recipe.rating}</span>
           </span>
         </div>
@@ -314,112 +355,7 @@ function recipeCardHTML(recipe, fromPage = 'home') {
     </a>`;
 }
 
-/* ── URL PARAMS ───────────────────────────────────────── */
+/* ── URL PARAMS HELPER ────────────────────────────────── */
 function getParam(name) {
   return new URLSearchParams(window.location.search).get(name);
-}
-
-/* ── VISUAL ENHANCEMENTS (Blobs & Particles) ───────────── */
-function initVisuals() {
-  const hero = document.querySelector('.hero, .page-hero');
-  if (hero && !hero.querySelector('.blob-bg')) {
-    createBlobBg(hero);
-    createFoodParticles(hero);
-  }
-}
-
-function createBlobBg(container) {
-  const specs = [
-    { pct: 0, x: '2%', y: '-20%', size: 520 },
-    { pct: 1, x: '65%', y: '5%', size: 440 },
-    { pct: 0, x: '35%', y: '55%', size: 380 },
-  ];
-  specs.forEach((s, i) => {
-    const el = document.createElement('div');
-    el.className = 'blob-bg';
-    Object.assign(el.style, {
-      background: i % 2 === 0 ? 'var(--c-primary)' : 'var(--c-accent)',
-      left: s.x,
-      top: s.y,
-      width: s.size + 'px',
-      height: s.size + 'px',
-      animationDelay: `-${i * 6}s`,
-      animationDuration: `${16 + i * 4}s`,
-    });
-    container.appendChild(el);
-  });
-}
-
-function createFoodParticles(container, count = 14) {
-  const wrap = document.createElement('div');
-  wrap.className = 'food-particles-wrap';
-  wrap.setAttribute('aria-hidden', 'true');
-  const foods = ['🥑', '🍅', '🥦', '🌿', '🍋', '🫑', '🥕', '🌽', '🍓', '🫒', '🧄', '🥗', '🍳', '🥞'];
-  for (let i = 0; i < count; i++) {
-    const el = document.createElement('div');
-    el.className = 'food-particle';
-    el.textContent = foods[i % foods.length];
-    const duration = 12 + Math.random() * 12;
-    Object.assign(el.style, {
-      left: `${5 + (i / count) * 90}%`,
-      fontSize: `${14 + Math.random() * 10}px`,
-      opacity: String(0.04 + Math.random() * 0.06),
-      animationDelay: `-${(Math.random() * duration).toFixed(1)}s`,
-      animationDuration: `${duration.toFixed(1)}s`,
-    });
-    wrap.appendChild(el);
-  }
-  container.appendChild(wrap);
-}
-
-/* ── 3D TILT & SPECULAR SHEEN PHYSICS ─────────────────── */
-function init3DTilt() {
-  if (typeof window === 'undefined') return;
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (prefersReducedMotion) return;
-
-  const tiltCards = document.querySelectorAll('.tilt-card, .recipe-card, .nutrient-card, .hero-image-wrap, .upload-zone');
-  tiltCards.forEach(card => {
-    if (card._tiltAttached) return;
-    card._tiltAttached = true;
-
-    // Inject 3D specular shine layer if not already present
-    if (!card.querySelector('.card-shine')) {
-      const shine = document.createElement('div');
-      shine.className = 'card-shine';
-      shine.setAttribute('aria-hidden', 'true');
-      card.appendChild(shine);
-    }
-
-    let rafId = null;
-
-    card.addEventListener('mouseenter', () => {
-      card.style.transition = 'transform 0.12s ease-out, box-shadow 0.12s ease-out';
-    });
-
-    card.addEventListener('mousemove', e => {
-      if (rafId) cancelAnimationFrame(rafId);
-      rafId = requestAnimationFrame(() => {
-        const rect = card.getBoundingClientRect();
-        const mouseX = e.clientX - rect.left;
-        const mouseY = e.clientY - rect.top;
-        const normX = (mouseX / rect.width) - 0.5; // -0.5 to 0.5
-        const normY = (mouseY / rect.height) - 0.5; // -0.5 to 0.5
-
-        const maxRotate = 14; // degrees of 3D tilt
-        const rotX = -normY * maxRotate;
-        const rotY = normX * maxRotate;
-
-        card.style.transform = `perspective(1100px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) translateZ(16px) translateY(-10px) scale3d(1.025, 1.025, 1.025)`;
-        card.style.setProperty('--mouse-x', `${((normX + 0.5) * 100).toFixed(1)}%`);
-        card.style.setProperty('--mouse-y', `${((normY + 0.5) * 100).toFixed(1)}%`);
-      });
-    });
-
-    card.addEventListener('mouseleave', () => {
-      if (rafId) cancelAnimationFrame(rafId);
-      card.style.transition = 'transform 0.55s cubic-bezier(0.34, 1.35, 0.64, 1), box-shadow 0.55s cubic-bezier(0.34, 1.35, 0.64, 1)';
-      card.style.transform = 'perspective(1100px) rotateX(0deg) rotateY(0deg) translateZ(0) translateY(0) scale3d(1, 1, 1)';
-    });
-  });
 }

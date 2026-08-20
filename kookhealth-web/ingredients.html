@@ -3,35 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KookHealth — Find Recipes by Ingredients</title>
-  <meta name="description" content="Tell us what ingredients you have and we'll find the perfect healthy recipes for you. No waste, no shopping trips." />
+  <title>KookHealth — Find & Generate Recipes by Ingredients</title>
+  <meta name="description" content="Add ingredients you already have and generate custom healthy recipes instantly with AI. No food waste, no grocery runs." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=4" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=5" />
   <style>
-    .ing-empty { color: var(--c-muted-l); font-size: 14px; font-style: italic; }
-    .find-btn-wrap { text-align: center; margin-top: 36px; }
-    .find-btn-wrap .btn { min-width: 260px; }
-    .results-section { display: none; margin-top: 56px; }
-    .results-section.show { display: block; }
-    .results-divider {
+    .loading-card {
+      display: none;
+      margin-top: 32px;
+      padding: 36px 24px;
+      border-radius: var(--r-xl);
+      border: 3px solid var(--c-dark);
+      background: var(--c-surf);
+      box-shadow: 6px 8px 0px var(--c-dark);
       text-align: center;
-      position: relative;
-      margin-bottom: 36px;
     }
-    .results-divider::before {
-      content: '';
-      position: absolute;
-      left: 0; right: 0; top: 50%;
-      height: 1px; background: var(--c-border);
-    }
-    .results-divider span {
-      position: relative;
-      background: var(--c-bg);
-      padding: 0 24px;
-      font-size: 15px; font-weight: 800;
-      color: var(--c-muted);
+    .loading-card.show { display: block; }
+    .loading-step-text {
+      font-family: var(--font-display);
+      font-size: 24px;
+      letter-spacing: 0.04em;
+      color: var(--c-primary);
+      margin-top: 14px;
     }
   </style>
 </head>
@@ -40,387 +35,344 @@
 <!-- NAVBAR -->
 <nav class="navbar" id="navbar" aria-label="Main navigation">
   <div class="container navbar-inner">
-    <a href="index.html" class="navbar-logo" aria-label="KookHealth home">
-      <div class="logo-icon" aria-hidden="true">🥦</div>
-      <span class="logo-text">KookHealth</span>
+    <a href="index.html" class="navbar-logo" aria-label="KookHealth Home">
+      <div class="logo-brandmark" aria-hidden="true">
+        <svg viewBox="0 0 32 32">
+          <path d="M6 16c0 6.627 4.477 12 10 12s10-5.373 10-12H6z"/>
+          <path d="M16 6c0 4-3 6-3 6s2.5.5 4-1.5c1.5-2 1-4.5 1-4.5s-1 0-2 0z"/>
+          <path d="M21 8c0 3-2 4.5-2 4.5s2 .5 3-1c1-1.5.5-3.5.5-3.5z"/>
+        </svg>
+      </div>
+      <span class="logo-wordmark">Kook<span>Health</span></span>
     </a>
+
     <div class="navbar-nav">
-      <a href="index.html"       class="nav-link" data-page="home">Home</a>
-      <a href="ingredients.html" class="nav-link" data-page="ingredients">Ingredients</a>
-      <a href="scan.html"        class="nav-link" data-page="scan">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      <a href="index.html" class="nav-link" data-page="home">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Home
+      </a>
+      <a href="ingredients.html" class="nav-link" data-page="ingredients">
+        <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        Ingredients
+      </a>
+      <a href="scan.html" class="nav-link" data-page="scan">
+        <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
         Scan Food
       </a>
       <a href="saved.html" class="nav-link" data-page="saved">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-        Saved Recipes
+        <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        Saved
         <span class="nav-badge" data-saved-count id="nav-saved-count">0</span>
       </a>
     </div>
+
     <div class="navbar-right">
-      <div class="theme-toggle" id="theme-toggle" role="switch" aria-checked="false" tabindex="0" aria-label="Toggle colour theme">
-        <span class="theme-icon">🌅</span>
+      <div class="theme-toggle" id="theme-toggle" role="switch" aria-checked="false" tabindex="0" aria-label="Toggle color theme">
+        <svg class="theme-icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
         <div class="t-track" aria-hidden="true"><div class="t-knob"></div></div>
-        <span class="theme-icon">🌿</span>
         <span class="theme-label">Warm</span>
       </div>
     </div>
-    <button class="hamburger" id="hamburger" aria-label="Open navigation menu" aria-expanded="false">
-      <svg viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18" stroke-linecap="round"/></svg>
+
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     </button>
   </div>
 </nav>
-<div class="mobile-nav" id="mobile-nav">
-  <a href="index.html"       class="nav-link" data-page="home">🏠 Home</a>
-  <a href="ingredients.html" class="nav-link" data-page="ingredients">🧺 Ingredients</a>
-  <a href="scan.html"        class="nav-link" data-page="scan">📷 Scan Food</a>
-  <a href="saved.html"       class="nav-link" data-page="saved">🔖 Saved Recipes</a>
+
+<!-- Mobile Nav Drawer -->
+<div class="mobile-nav" id="mobile-nav" aria-label="Mobile navigation">
+  <a href="index.html" class="nav-link" data-page="home">Home</a>
+  <a href="ingredients.html" class="nav-link" data-page="ingredients">Ingredients</a>
+  <a href="scan.html" class="nav-link" data-page="scan">Scan Food</a>
+  <a href="saved.html" class="nav-link" data-page="saved">Saved Recipes</a>
 </div>
 
 <!-- PAGE HERO -->
-<section class="page-hero" aria-label="Ingredient finder header">
+<section class="page-hero">
   <div class="container">
-    <div class="page-hero-icon" aria-hidden="true">🧺</div>
-    <h1>What's in Your Kitchen?</h1>
-    <p>Add the ingredients you have on hand and we'll find perfect recipes for you — no shopping required.</p>
+    <div class="page-hero-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+    </div>
+    <span class="sticker-badge rotate-left" style="margin-bottom:16px;">
+      <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      Zero Food Waste
+    </span>
+    <h1>Cook With What You Have</h1>
+    <p>Tell us what is currently in your fridge or pantry. Our AI culinary model crafts balanced, delicious recipes tailored precisely to your ingredients.</p>
   </div>
 </section>
 
-<!-- MAIN CONTENT -->
-<main>
-  <section class="section">
-    <div class="container">
-      <div class="ing-layout">
+<!-- WORKSPACE SECTION -->
+<section class="section" id="workspace">
+  <div class="container">
+    <div class="ing-layout">
 
-        <!-- Input card -->
-        <div class="ing-panel" aria-label="Add ingredients">
-          <p class="ing-panel-title">Add Your Ingredients</p>
-          <label for="ing-input" style="display:block;font-size:12px;font-weight:700;color:var(--c-muted);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:10px;">Type an ingredient</label>
-          <div class="ing-input-row">
-            <input
-              type="text"
-              class="ing-input"
-              id="ing-input"
-              placeholder="e.g. chicken, eggs, tomatoes&hellip;"
-              aria-label="Type an ingredient name"
-              autocomplete="off"
-            />
-            <button class="add-ing-btn" id="add-btn" aria-label="Add ingredient">
-              <svg viewBox="0 0 24 24" width="16" height="16" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
-              Add
-            </button>
-          </div>
+      <!-- Left: Active Ingredients Panel -->
+      <div class="ing-panel">
+        <h2 class="ing-panel-title">Your Ingredients</h2>
+        
+        <form class="ing-input-row" id="ing-form" onsubmit="return false;">
+          <input type="text"
+                 class="ing-input"
+                 id="ing-input"
+                 placeholder="Type an ingredient (e.g. Avocado, Greek Yogurt)..."
+                 aria-label="Add ingredient" />
+          <button type="submit" class="add-ing-btn" id="add-btn">
+            <svg style="width:18px; height:18px; stroke:currentColor; stroke-width:3; fill:none;" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add
+          </button>
+        </form>
 
-          <!-- Added chips -->
-          <div id="ing-tags-section" aria-live="polite" aria-label="Added ingredients" style="min-height:48px;">
-            <div class="ing-tags" id="tags-wrap">
-              <p class="ing-empty" id="ing-empty-msg" style="font-size:13px;color:var(--c-muted-l);font-weight:500;padding:8px 0;margin:0;">No ingredients added yet &mdash; type above to start.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Quick-add common ingredients -->
-        <div style="margin-bottom:32px;">
-          <p style="font-size:12px;font-weight:700;color:var(--c-muted);text-transform:uppercase;letter-spacing:0.6px;margin:0 0 12px;">Quick Add &mdash; Common Ingredients</p>
-          <div class="quick-chips" id="suggested-grid" role="list" aria-label="Suggested common ingredients">
-          </div>
-        </div>
-
-        <!-- Generate button -->
-        <div class="error-banner" id="error-banner" role="alert">
-          <span class="error-icon">⚠️</span>
-          <div style="flex:1;">
-            <span class="error-msg">Couldn&rsquo;t generate a recipe right now. Please try again.</span>
-            <span id="error-detail" style="display:none;font-size:12px;color:var(--c-muted);font-weight:500;margin-top:3px;line-height:1.4;"></span>
-          </div>
-          <button class="error-retry" id="error-retry" type="button">↺ Retry</button>
+        <div class="ing-tags" id="ing-tags" aria-label="Added ingredients" role="list">
+          <!-- Injected tags -->
         </div>
 
         <div class="find-btn-wrap">
-          <button class="btn btn-primary btn-xl" id="find-btn"
-            aria-label="Generate recipe with AI"
-            disabled style="opacity:0.5;cursor:not-allowed;">
-            <span class="sparkle-icon" aria-hidden="true">✨</span>
-            Generate Recipe with AI
+          <button class="btn btn-primary btn-xl" id="generate-btn" style="width:100%;">
+            <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            Generate Recipe With AI
             <span class="ing-count" id="ing-count">0</span>
           </button>
-          <p style="margin:12px 0 0;font-size:13px;color:var(--c-muted);" id="find-hint">Add at least 1 ingredient to generate a recipe</p>
         </div>
 
-      </div><!-- /.ing-layout -->
+        <!-- Branded AI Loading State -->
+        <div class="loading-card" id="loading-card">
+          <div class="analyze-spinner" style="margin:0 auto; border-color:rgba(20,18,10,0.2); border-top-color:var(--c-primary);"></div>
+          <div class="loading-step-text" id="loading-step">Analyzing Flavor Profiles...</div>
+          <p style="font-size:14px; color:var(--c-muted); margin-top:6px;">Our Gemini chef is calculating culinary pairings & nutrition balance.</p>
+        </div>
+      </div>
 
-      <!-- Results section (shown after clicking Find Recipes) -->
-      <div class="results-section" id="results-section" aria-label="Matching recipes">
-        <div class="results-divider">
-          <span>🍳 Recipes you can make</span>
+      <!-- Right: Quick Add Chips -->
+      <div class="ing-panel">
+        <h2 class="ing-panel-title">Quick Add Staples</h2>
+        <p style="font-size:14px; color:var(--c-text-2); margin-bottom:20px;">
+          Tap any common pantry item to instantly drop it into your ingredient list.
+        </p>
+
+        <div class="quick-chips" id="suggested-grid" role="list">
+          <!-- Injected via JavaScript with clean Vector SVG Icons -->
         </div>
-        <div class="section-hdr section-hdr-row">
-          <div>
-            <h2 id="results-heading">Matching Recipes</h2>
-            <p id="results-sub">Based on your ingredients</p>
-          </div>
-          <button class="see-all" id="clear-results" aria-label="Clear results and search again">← Search again</button>
-        </div>
-        <div class="recipe-grid" id="results-grid" role="list" aria-label="Recipe results"></div>
       </div>
 
     </div>
-  </section>
-</main>
 
+    <!-- Results Section -->
+    <div class="results-section" id="results-section">
+      <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:32px; flex-wrap:wrap; gap:16px;">
+        <div>
+          <span class="sticker-badge rotate-left" style="margin-bottom:12px;">
+            <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            Ready to Cook
+          </span>
+          <h2 id="results-title">Matching Recipes</h2>
+        </div>
+        <p id="results-count" style="font-size:16px; font-weight:700; color:var(--c-primary);"></p>
+      </div>
+
+      <div class="recipe-grid" id="results-grid"></div>
+    </div>
+  </div>
+</section>
 
 <!-- FOOTER -->
-<footer class="footer" aria-label="Site footer">
+<footer class="footer" role="contentinfo">
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <div class="navbar-logo" style="margin-bottom:0">
-          <div class="logo-icon" style="background:rgba(255,255,255,0.12);box-shadow:none;" aria-hidden="true">🥦</div>
-          <span class="logo-text">KookHealth</span>
-        </div>
-        <p>Discover healthy, delicious recipes based on what's already in your kitchen. Eat well, live well.</p>
+        <a href="index.html" class="navbar-logo" aria-label="KookHealth Home">
+          <div class="logo-brandmark" aria-hidden="true" style="background:var(--c-accent); color:var(--c-dark);">
+            <svg viewBox="0 0 32 32"><path d="M6 16c0 6.627 4.477 12 10 12s10-5.373 10-12H6z"/><path d="M16 6c0 4-3 6-3 6s2.5.5 4-1.5c1.5-2 1-4.5 1-4.5s-1 0-2 0z"/></svg>
+          </div>
+          <span class="logo-wordmark">Kook<span>Health</span></span>
+        </a>
+        <p>Chef-crafted recipes and intelligent AI nutrition scanning built for modern, healthy living.</p>
       </div>
-      <div class="footer-col"><h4>Explore</h4><ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="ingredients.html">Find by Ingredients</a></li>
-        <li><a href="scan.html">Scan Food</a></li>
-        <li><a href="saved.html">Saved Recipes</a></li>
-      </ul></div>
-      <div class="footer-col"><h4>Categories</h4><ul>
-        <li><a href="ingredients.html">Breakfast</a></li>
-        <li><a href="ingredients.html">Vegan</a></li>
-        <li><a href="ingredients.html">Quick Meals</a></li>
-        <li><a href="ingredients.html">Desserts</a></li>
-      </ul></div>
-      <div class="footer-col"><h4>About</h4><ul>
-        <li><a href="#">About Us</a></li>
-        <li><a href="#">Privacy Policy</a></li>
-        <li><a href="#">Terms of Service</a></li>
-        <li><a href="#">Contact</a></li>
-      </ul></div>
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="ingredients.html">Ingredients</a></li>
+          <li><a href="scan.html">Scan Food</a></li>
+          <li><a href="saved.html">Saved Recipes</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Dietary</h4>
+        <ul>
+          <li><a href="index.html">High Protein</a></li>
+          <li><a href="index.html">Vegetarian & Vegan</a></li>
+          <li><a href="index.html">Mediterranean</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>AI Engine</h4>
+        <ul>
+          <li><a href="https://deepmind.google/technologies/gemini/" target="_blank" rel="noopener">Gemini 2.5 Flash</a></li>
+          <li><a href="https://expressjs.com" target="_blank" rel="noopener">Express API Server</a></li>
+        </ul>
+      </div>
     </div>
     <div class="footer-bottom">
-      <p>© 2026 KookHealth. Made with ❤️ for home cooks everywhere.</p>
-      <p>🌿 Eat fresh. Cook smart. Live healthy.</p>
+      <p>© 2026 KookHealth. Bold Nutrition & Smart Cooking.</p>
     </div>
   </div>
 </footer>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="app.js?v=4"></script>
+<script src="app.js?v=5"></script>
 <script>
   initPage('ingredients');
 
-  /* ── State ── */
-  let addedIngredients = [];
-
   const SUGGESTED = [
-    { emoji: '🥚', name: 'Eggs'       }, { emoji: '🍚', name: 'Rice'      },
-    { emoji: '🍅', name: 'Tomatoes'   }, { emoji: '🍗', name: 'Chicken'   },
-    { emoji: '🥑', name: 'Avocado'    }, { emoji: '🧅', name: 'Onion'     },
-    { emoji: '🧄', name: 'Garlic'     }, { emoji: '🥛', name: 'Milk'      },
-    { emoji: '🧀', name: 'Cheese'     }, { emoji: '🥬', name: 'Spinach'   },
-    { emoji: '🍋', name: 'Lemon'      }, { emoji: '🌿', name: 'Basil'     },
-    { emoji: '🫙', name: 'Olive Oil'  }, { emoji: '🥕', name: 'Carrots'   },
-    { emoji: '🫑', name: 'Peppers'    }, { emoji: '🥝', name: 'Ginger'    },
+    'Eggs', 'Tomatoes', 'Chicken Breast', 'Avocado', 'Onion',
+    'Garlic', 'Milk', 'Feta Cheese', 'Spinach', 'Lemon',
+    'Olive Oil', 'Carrots', 'Bell Peppers', 'Basil', 'Quinoa', 'Pasta'
   ];
 
-  /* ── Render suggested chips ── */
+  let userIngredients = [];
+
+  const input         = document.getElementById('ing-input');
+  const form          = document.getElementById('ing-form');
+  const tagsContainer = document.getElementById('ing-tags');
+  const countBadge    = document.getElementById('ing-count');
+  const generateBtn   = document.getElementById('generate-btn');
   const suggestedGrid = document.getElementById('suggested-grid');
+  const resultsSec    = document.getElementById('results-section');
+  const resultsGrid   = document.getElementById('results-grid');
+  const resultsCount  = document.getElementById('results-count');
+  const loadingCard   = document.getElementById('loading-card');
+  const loadingStep   = document.getElementById('loading-step');
+
+  /* Vector food icon helper */
+  function getFoodSvg() {
+    return `<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;stroke-width:2.2;fill:none;"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>`;
+  }
+
+  /* Render Quick Add Chips */
   suggestedGrid.innerHTML = SUGGESTED.map(s => `
-    <button class="quick-chip" data-name="${s.name}" aria-label="Add ${s.name}" role="listitem">
-      <span>${s.emoji}</span>
-      ${s.name}
+    <button class="quick-chip" data-name="${s}" aria-label="Add ${s}" role="listitem">
+      ${getFoodSvg()}
+      ${s}
     </button>`).join('');
 
   suggestedGrid.addEventListener('click', e => {
     const chip = e.target.closest('.quick-chip');
     if (!chip) return;
     const name = chip.dataset.name;
-    if (!addedIngredients.includes(name)) {
+    if (!userIngredients.map(i => i.toLowerCase()).includes(name.toLowerCase())) {
       addIngredient(name);
-      chip.style.background = 'var(--c-primary-l)';
-      chip.style.borderColor = 'var(--c-primary)';
-      chip.style.color = 'var(--c-primary)';
-    } else {
-      removeIngredient(name);
-      chip.style.background = '';
-      chip.style.borderColor = '';
-      chip.style.color = '';
+      chip.style.background = 'var(--c-accent)';
     }
   });
 
-  /* ── Add ingredient ── */
   function addIngredient(name) {
-    name = name.trim();
-    if (!name || addedIngredients.includes(name)) return;
-    addedIngredients.push(name);
-    renderTags();
-    updateFindBtn();
-  }
-
-  function removeIngredient(name) {
-    addedIngredients = addedIngredients.filter(i => i !== name);
-    // Unmark suggested chip if present
-    suggestedGrid.querySelectorAll('.quick-chip').forEach(chip => {
-      if (chip.dataset.name === name) {
-        chip.style.background = '';
-        chip.style.borderColor = '';
-        chip.style.color = '';
-      }
-    });
-    renderTags();
-    updateFindBtn();
-  }
-
-  /* ── Render tags ── */
-  function renderTags() {
-    const wrap = document.getElementById('tags-wrap');
-    if (addedIngredients.length === 0) {
-      wrap.innerHTML = '<p class="ing-empty" id="ing-empty-msg" style="font-size:13px;color:var(--c-muted-l);font-weight:500;padding:8px 0;margin:0;">No ingredients added yet &mdash; type above to start.</p>';
+    const trimmed = name.trim();
+    if (!trimmed) return;
+    if (userIngredients.map(i => i.toLowerCase()).includes(trimmed.toLowerCase())) {
+      showToast(`${trimmed} is already in your list`);
       return;
     }
-    wrap.innerHTML = addedIngredients.map(name => `
-      <span class="ing-tag" data-ing="${name}">
-        ${name}
-        <button class="ing-tag-remove" aria-label="Remove ${name}" data-remove="${name}">&times;</button>
-      </span>`).join('');
+    userIngredients.push(trimmed);
+    renderTags();
+    input.value = '';
+    input.focus();
+  }
 
-    wrap.querySelectorAll('.ing-tag-remove').forEach(btn => {
-      btn.addEventListener('click', e => removeIngredient(e.currentTarget.dataset.remove));
+  function removeIngredient(index) {
+    const removed = userIngredients.splice(index, 1)[0];
+    renderTags();
+    document.querySelectorAll('.quick-chip').forEach(chip => {
+      if (chip.dataset.name.toLowerCase() === removed.toLowerCase()) {
+        chip.style.background = '';
+      }
     });
   }
 
-  /* ── Update button state ── */
-  function updateFindBtn() {
-    const btn   = document.getElementById('find-btn');
-    const count = document.getElementById('ing-count');
-    const hint  = document.getElementById('find-hint');
-    if (!count) return; // guard: during loading state ing-count is replaced
-    count.textContent = addedIngredients.length;
-    if (addedIngredients.length > 0) {
-      btn.disabled = false;
-      btn.style.opacity = '1';
-      btn.style.cursor  = 'pointer';
-      hint.textContent  = `${addedIngredients.length} ingredient${addedIngredients.length > 1 ? 's' : ''} added — ready to generate!`;
-    } else {
-      btn.disabled = true;
-      btn.style.opacity = '0.5';
-      btn.style.cursor  = 'not-allowed';
-      hint.textContent  = 'Add at least 1 ingredient to generate a recipe';
+  function renderTags() {
+    countBadge.textContent = userIngredients.length;
+    if (userIngredients.length === 0) {
+      tagsContainer.innerHTML = `<span style="font-size:14px; color:var(--c-muted); font-style:italic;">No ingredients added yet. Type above or tap quick staples!</span>`;
+      return;
     }
+    tagsContainer.innerHTML = userIngredients.map((ing, i) => `
+      <span class="ing-tag" role="listitem">
+        ${ing}
+        <button class="ing-tag-remove" onclick="removeIngredient(${i})" aria-label="Remove ${ing}">×</button>
+      </span>`).join('');
   }
 
-  /* ── Add button click ── */
-  const ingInput = document.getElementById('ing-input');
-  document.getElementById('add-btn').addEventListener('click', () => {
-    addIngredient(ingInput.value);
-    ingInput.value = '';
-    ingInput.focus();
-  });
-  ingInput.addEventListener('keydown', e => {
-    if (e.key === 'Enter') {
-      addIngredient(ingInput.value);
-      ingInput.value = '';
-    }
+  renderTags();
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    addIngredient(input.value);
   });
 
-  /* ── AI Recipe Generation ── */
-  const API_BASE = ['localhost', '127.0.0.1', ''].includes(window.location.hostname)
-    ? 'http://localhost:3001'
-    : window.location.origin;
+  /* ── AI Recipe Generation Sequence ── */
+  generateBtn.addEventListener('click', async () => {
+    if (userIngredients.length === 0) {
+      showToast('Please add at least one ingredient first');
+      input.focus();
+      return;
+    }
 
-  function resetFindBtn() {
-    const btn  = document.getElementById('find-btn');
-    const hint = document.getElementById('find-hint');
-    btn.innerHTML = `<span class="sparkle-icon" aria-hidden="true">✨</span>
-      Generate Recipe with AI
-      <span class="ing-count" id="ing-count">${addedIngredients.length}</span>`;
-    btn.classList.remove('btn-ai-loading');
-    btn.disabled = false;
-    btn.style.opacity = '1';
-    btn.style.cursor  = 'pointer';
-    if (hint) hint.textContent = `${addedIngredients.length} ingredient${addedIngredients.length > 1 ? 's' : ''} added — ready to generate!`;
-  }
+    generateBtn.disabled = true;
+    loadingCard.classList.add('show');
+    resultsSec.classList.remove('show');
 
-  function setRecipeErrorDetail(detail) {
-    const detailEl = document.getElementById('error-detail');
-    if (!detailEl) return;
-    detailEl.textContent = detail || '';
-    detailEl.style.display = detail ? 'block' : 'none';
-  }
-
-  async function startGeneration() {
-    const btn  = document.getElementById('find-btn');
-    const hint = document.getElementById('find-hint');
-    document.getElementById('error-banner').classList.remove('show');
-    setRecipeErrorDetail('');
-
-    /* Loading UI */
-    btn.innerHTML = `<div class="btn-spinner"></div> Generating your recipe…`;
-    btn.classList.add('btn-ai-loading');
-    btn.disabled = true;
-    btn.style.opacity = '1';
-    btn.style.cursor  = 'wait';
-    if (hint) hint.textContent = 'AI is crafting the perfect recipe for you…';
+    const steps = [
+      'Analyzing Flavor Profiles...',
+      'Pairing Nutritional Macros...',
+      'Composing Step-by-Step Technique...',
+      'Finalizing Cooking Times & Servings...'
+    ];
+    let stepIdx = 0;
+    const stepInterval = setInterval(() => {
+      stepIdx = (stepIdx + 1) % steps.length;
+      loadingStep.textContent = steps[stepIdx];
+    }, 1200);
 
     try {
-      const response = await fetch(`${API_BASE}/api/generate-recipe`, {
+      const response = await fetch('/api/generate-recipe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ingredients: addedIngredients }),
+        body: JSON.stringify({ ingredients: userIngredients }),
       });
 
+      clearInterval(stepInterval);
+      loadingCard.classList.remove('show');
+      generateBtn.disabled = false;
+
       if (!response.ok) {
-        // Read the error JSON so we can surface `detail` in the UI
-        let errJson = {};
-        try { errJson = await response.json(); } catch {}
-        const error = new Error(errJson.error || `Server ${response.status}`);
-        error.detail = errJson.detail;
-        throw error;
+        throw new Error('API request failed');
       }
 
-      const recipe = await response.json();
-      if (recipe.error) {
-        const error = new Error(recipe.error);
-        error.detail = recipe.detail;
-        throw error;
-      }
-
-      /* Store for recipe.html to read */
-      sessionStorage.setItem('kookhealth-ai-recipe', JSON.stringify({
-        ...recipe,
-        _ingredients: addedIngredients,
-        _generatedAt: Date.now(),
-      }));
-
-      window.location.href = 'recipe.html?ai=1&from=ingredients';
+      const generated = await response.json();
+      sessionStorage.setItem('kookhealth-ai-recipe', JSON.stringify(generated));
+      window.location.href = 'recipe.html?id=ai&from=ingredients';
 
     } catch (err) {
-      console.error('Generation error:', err);
-      resetFindBtn();
-      // Show error banner + detail if server returned one
-      document.getElementById('error-banner').classList.add('show');
-      setRecipeErrorDetail(err.detail);
-      if (hint) hint.textContent = `${addedIngredients.length} ingredient${addedIngredients.length > 1 ? 's' : ''} added — try again`;
+      clearInterval(stepInterval);
+      loadingCard.classList.remove('show');
+      generateBtn.disabled = false;
+
+      /* Fallback to matching database recipes */
+      showToast('Showing best matching pantry recipes');
+      const matches = Object.values(RECIPES).filter(r =>
+        r.ingredients.some(ing =>
+          userIngredients.some(u => ing.name.toLowerCase().includes(u.toLowerCase()))
+        )
+      );
+
+      const list = matches.length > 0 ? matches : Object.values(RECIPES);
+      resultsGrid.innerHTML = list.map(r => recipeCardHTML(r, 'ingredients')).join('');
+      resultsCount.textContent = `${list.length} Recipe${list.length > 1 ? 's' : ''} Matched`;
+      resultsSec.classList.add('show');
+      resultsSec.scrollIntoView({ behavior: 'smooth' });
     }
-  }
-
-  document.getElementById('find-btn').addEventListener('click', () => {
-    if (addedIngredients.length === 0) return;
-    startGeneration();
-  });
-
-  document.getElementById('error-retry').addEventListener('click', () => {
-    document.getElementById('error-banner').classList.remove('show');
-    setRecipeErrorDetail('');
-    startGeneration();
-  });
-
-  document.getElementById('clear-results').addEventListener('click', () => {
-    document.getElementById('results-section').classList.remove('show');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 </script>
 </body>

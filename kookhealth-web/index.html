@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KookHealth — Healthy Recipe Discovery</title>
-  <meta name="description" content="Discover healthy recipes based on ingredients you already have. Scan food photos to see nutrition facts. KookHealth makes eating well effortless." />
+  <title>KookHealth — Bold, Healthy Recipe Discovery & Food Scanner</title>
+  <meta name="description" content="Discover healthy recipes based on ingredients you already have. Scan food photos to see nutrition facts. KookHealth makes eating well effortless and bold." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=4" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=5" />
 </head>
 <body>
 
@@ -17,320 +17,380 @@
      ============================================================ -->
 <nav class="navbar" id="navbar" aria-label="Main navigation">
   <div class="container navbar-inner">
-    <a href="index.html" class="navbar-logo" aria-label="KookHealth home">
-      <div class="logo-icon" aria-hidden="true">🥦</div>
-      <span class="logo-text">KookHealth</span>
+    <a href="index.html" class="navbar-logo" aria-label="KookHealth Home">
+      <div class="logo-brandmark" aria-hidden="true">
+        <!-- Abstract fusion of bowl + sprout leaf + steam -->
+        <svg viewBox="0 0 32 32">
+          <path d="M6 16c0 6.627 4.477 12 10 12s10-5.373 10-12H6z"/>
+          <path d="M16 6c0 4-3 6-3 6s2.5.5 4-1.5c1.5-2 1-4.5 1-4.5s-1 0-2 0z"/>
+          <path d="M21 8c0 3-2 4.5-2 4.5s2 .5 3-1c1-1.5.5-3.5.5-3.5z"/>
+        </svg>
+      </div>
+      <span class="logo-wordmark">Kook<span>Health</span></span>
     </a>
 
-    <!-- Desktop nav -->
+    <!-- Desktop Nav Links -->
     <div class="navbar-nav">
-      <a href="index.html"       class="nav-link" data-page="home">Home</a>
-      <a href="ingredients.html" class="nav-link" data-page="ingredients">Ingredients</a>
-      <a href="scan.html"        class="nav-link" data-page="scan">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      <a href="index.html" class="nav-link" data-page="home">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Home
+      </a>
+      <a href="ingredients.html" class="nav-link" data-page="ingredients">
+        <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        Ingredients
+      </a>
+      <a href="scan.html" class="nav-link" data-page="scan">
+        <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
         Scan Food
       </a>
       <a href="saved.html" class="nav-link" data-page="saved">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-        Saved Recipes
+        <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        Saved
         <span class="nav-badge" data-saved-count id="nav-saved-count">0</span>
       </a>
     </div>
 
-    <!-- Right side -->
+    <!-- Theme Toggle -->
     <div class="navbar-right">
-      <div class="theme-toggle" id="theme-toggle" role="switch" aria-checked="false" tabindex="0" aria-label="Toggle colour theme">
-        <span class="theme-icon">🌅</span>
+      <div class="theme-toggle" id="theme-toggle" role="switch" aria-checked="false" tabindex="0" aria-label="Toggle color theme">
+        <svg class="theme-icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
         <div class="t-track" aria-hidden="true"><div class="t-knob"></div></div>
-        <span class="theme-icon">🌿</span>
         <span class="theme-label">Warm</span>
       </div>
     </div>
 
     <!-- Hamburger -->
-    <button class="hamburger" id="hamburger" aria-label="Open navigation menu" aria-expanded="false">
-      <svg viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18" stroke-linecap="round"/></svg>
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     </button>
   </div>
 </nav>
 
-<!-- Mobile nav -->
+<!-- Mobile Nav Drawer -->
 <div class="mobile-nav" id="mobile-nav" aria-label="Mobile navigation">
-  <a href="index.html"       class="nav-link" data-page="home">🏠 Home</a>
-  <a href="ingredients.html" class="nav-link" data-page="ingredients">🧺 Ingredients</a>
-  <a href="scan.html"        class="nav-link" data-page="scan">📷 Scan Food</a>
-  <a href="saved.html"       class="nav-link" data-page="saved">🔖 Saved Recipes</a>
-  <div class="theme-toggle" id="theme-toggle-mobile" tabindex="0" style="margin-top:8px;width:fit-content;" aria-label="Toggle theme">
-    <span class="theme-icon">🌅</span>
-    <div class="t-track"><div class="t-knob"></div></div>
-    <span class="theme-icon">🌿</span>
-    <span class="theme-label">Warm</span>
-  </div>
+  <a href="index.html" class="nav-link" data-page="home">Home</a>
+  <a href="ingredients.html" class="nav-link" data-page="ingredients">Ingredients</a>
+  <a href="scan.html" class="nav-link" data-page="scan">Scan Food</a>
+  <a href="saved.html" class="nav-link" data-page="saved">Saved Recipes</a>
 </div>
 
-
 <!-- ============================================================
-     HERO SECTION
+     HERO SECTION (CRAV Poster Style)
      ============================================================ -->
-<section class="hero" aria-label="Featured recipe">
+<section class="hero" id="hero">
   <div class="container">
     <div class="hero-inner">
-
-      <!-- Left: text -->
       <div class="hero-text">
-        <div class="hero-eyebrow" aria-label="Featured recipe badge">
-          ⭐ Featured Recipe of the Day
+        <div class="hero-badges-row">
+          <span class="sticker-badge rotate-left">
+            <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            100% Whole Foods
+          </span>
+          <span class="sticker-badge rotate-right" style="background:var(--c-accent); color:var(--c-dark);">
+            <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            AI Kitchen Engine
+          </span>
         </div>
+
         <h1 class="hero-title">
-          Avocado Toast &amp;<br>
-          <em>Poached Egg</em>
+          <span class="title-dark">Eat Fresh.</span>
+          Cook Bold.
+          <span class="title-outline">Zero Guilt.</span>
         </h1>
+
         <p class="hero-desc">
-          Farm-fresh ingredients, ready in 15 minutes. Creamy avocado on crispy sourdough topped with a perfectly runny poached egg and fresh herbs.
+          Stop staring into the fridge wondering what to make. Enter your ingredients for instant chef-crafted recipes, or scan any meal to reveal calorie and macronutrient breakdowns in seconds.
         </p>
+
         <div class="hero-actions">
-          <a href="recipe.html?id=hero&from=home" class="btn btn-primary btn-lg" aria-label="View featured recipe">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            View Recipe
+          <a href="ingredients.html" class="btn btn-primary btn-lg">
+            <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            Find by Ingredients
           </a>
-          <a href="ingredients.html" class="btn btn-ghost btn-lg" aria-label="Find recipes by ingredients">
-            🧺 Find by Ingredients
+          <a href="scan.html" class="btn btn-accent btn-lg">
+            <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            Scan Food Photo
           </a>
         </div>
-        <div class="hero-stats" aria-label="Site statistics">
+
+        <div class="hero-stats">
           <div class="hero-stat">
-            <span class="hero-stat-num">2,400+</span>
+            <span class="hero-stat-num">500+</span>
             <span class="hero-stat-lbl">Healthy Recipes</span>
           </div>
           <div class="hero-stat">
-            <span class="hero-stat-num">98%</span>
-            <span class="hero-stat-lbl">User Satisfaction</span>
+            <span class="hero-stat-num">10 SEC</span>
+            <span class="hero-stat-lbl">AI Food Scan</span>
           </div>
           <div class="hero-stat">
-            <span class="hero-stat-num">15 min</span>
-            <span class="hero-stat-lbl">Avg. Cook Time</span>
+            <span class="hero-stat-num">4.9 ★</span>
+            <span class="hero-stat-lbl">Community Loved</span>
           </div>
         </div>
       </div>
 
-      <!-- Right: hero image -->
+      <!-- Hero Showcase Card -->
       <div class="hero-image-wrap">
-        <div class="hero-floating-badge" aria-hidden="true">🔥 Trending Today</div>
-        <div class="hero-image">
-          <img src="hero_recipe.png" alt="Avocado toast with poached egg" fetchpriority="high" />
-        </div>
-        <!-- Floating mini recipe card -->
-        <div class="hero-mini-card" aria-hidden="true">
-          <div class="hero-mini-avatar">🥑</div>
-          <div class="hero-mini-info">
-            <span class="hero-mini-title">⭐ 4.9 Rating</span>
-            <span class="hero-mini-sub">⏱️ 15 min &middot; 320 kcal</span>
-          </div>
-        </div>
+        <span class="sticker-badge hero-sticker-top rotate-right">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Trending Recipe
+        </span>
+
+        <a href="recipe.html?id=hero" class="hero-image" aria-label="View Avocado Toast & Poached Egg">
+          <img src="https://images.unsplash.com/photo-1525351484163-7529414344d8?w=1000&auto=format&fit=crop&q=80"
+               alt="Crisp sourdough avocado toast with a golden runny poached egg" />
+        </a>
+
+        <span class="sticker-badge hero-sticker-bottom rotate-left">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          15 Min • 320 kcal
+        </span>
       </div>
-
     </div>
   </div>
 </section>
 
-
-<!-- Search Bar -->
-<section class="section" style="padding-block:40px;" aria-label="Search recipes">
-  <div class="container">
-    <div class="search-wrap">
-      <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35" stroke-linecap="round"/></svg>
-      <input
-        type="search"
-        class="search-input"
-        id="search-input"
-        placeholder="Search recipes or ingredients… e.g. ‘avocado’, ‘quick vegan’"
-        aria-label="Search recipes or ingredients"
-        autocomplete="off"
-      />
-    </div>
-  </div>
-</section>
-
-
-<!-- Food Categories -->
-<section class="section" style="padding-top:0;padding-bottom:56px;" aria-labelledby="categories-heading">
-  <div class="container">
-    <div class="section-head">
-      <div>
-        <h2 class="section-title" id="categories-heading">Food Categories</h2>
-        <p class="section-subtitle">Browse by what you&rsquo;re craving today</p>
-      </div>
-      <a href="ingredients.html" class="section-link">View all &rarr;</a>
-    </div>
-    <div class="category-row" role="list" aria-label="Food categories">
-      <a href="ingredients.html" class="cat-pill active" role="listitem">
-        <span class="cat-pill-icon">🍽️</span> All
-      </a>
-      <a href="ingredients.html" class="cat-pill" role="listitem">
-        <span class="cat-pill-icon">🥞</span> Breakfast
-      </a>
-      <a href="ingredients.html" class="cat-pill" role="listitem">
-        <span class="cat-pill-icon">🥦</span> Vegan
-      </a>
-      <a href="ingredients.html" class="cat-pill" role="listitem">
-        <span class="cat-pill-icon">🍮</span> Desserts
-      </a>
-      <a href="ingredients.html" class="cat-pill" role="listitem">
-        <span class="cat-pill-icon">⚡</span> Quick
-      </a>
-      <a href="ingredients.html" class="cat-pill" role="listitem">
-        <span class="cat-pill-icon">🍝</span> Pasta
-      </a>
-      <a href="ingredients.html" class="cat-pill" role="listitem">
-        <span class="cat-pill-icon">🥗</span> Salads
-      </a>
-      <a href="ingredients.html" class="cat-pill" role="listitem">
-        <span class="cat-pill-icon">🍲</span> Soups
-      </a>
-      <a href="ingredients.html" class="cat-pill" role="listitem">
-        <span class="cat-pill-icon">🧃</span> Smoothies
-      </a>
-      <a href="ingredients.html" class="cat-pill" role="listitem">
-        <span class="cat-pill-icon">🍗</span> Protein
-      </a>
-    </div>
-  </div>
-</section>
-
-
-<!-- Popular Recipes -->
-<section class="section" aria-labelledby="popular-heading" style="padding-top:0;">
-  <div class="container">
-    <div class="section-head">
-      <div>
-        <h2 class="section-title" id="popular-heading">Popular Recipes</h2>
-        <p class="section-subtitle">Loved by thousands of home cooks</p>
-      </div>
-      <a href="ingredients.html" class="section-link">See all →</a>
-    </div>
-    <div class="recipe-grid" id="recipe-grid" role="list" aria-label="Popular recipe cards"></div>
-  </div>
-</section>
-
+<!-- Wave Transition to Terracotta Section -->
+<div class="wave-divider" style="color:var(--c-primary);" aria-hidden="true">
+  <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
+    <path fill="currentColor" d="M0,32L60,42.7C120,53,240,75,360,74.7C480,75,600,53,720,42.7C840,32,960,32,1080,42.7C1200,53,1320,75,1380,85.3L1440,96L1440,96L1380,96C1320,96,1200,96,1080,96C960,96,840,96,720,96C600,96,480,96,360,96C240,96,120,96,60,96L0,96Z"></path>
+  </svg>
+</div>
 
 <!-- ============================================================
-     CTA BANNER
+     CATEGORY EXPLORER (Color-Block Terracotta)
      ============================================================ -->
-<section class="section" style="padding-top:0;" aria-label="Scan food promotion">
+<section class="section color-block-primary" id="categories">
   <div class="container">
-    <div style="
-      background: var(--gradient-btn);
-      border-radius: var(--r-xl);
-      padding: 56px 48px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 32px;
-      flex-wrap: wrap;
-      box-shadow: var(--shadow-lg);
-    ">
+    <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:32px; flex-wrap:wrap; gap:16px;">
       <div>
-        <div style="font-size:48px;margin-bottom:12px;">📷</div>
-        <h2 style="font-size:2rem;font-weight:900;color:white;letter-spacing:-0.04em;margin:0 0 10px;">
-          Scan Your Food
-        </h2>
-        <p style="color:rgba(255,255,255,0.82);font-size:1rem;margin:0;max-width:440px;line-height:1.65;">
-          Upload a photo of any meal and instantly see its calorie count, macros, and nutritional breakdown.
-        </p>
+        <span class="sticker-badge rotate-left" style="background:#ffffff; color:var(--c-primary); margin-bottom:12px;">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Curated Menu
+        </span>
+        <h2>Explore By Craving</h2>
       </div>
-      <a href="scan.html" class="btn btn-xl" style="background:white;color:var(--c-primary);box-shadow:0 8px 32px rgba(0,0,0,0.18);flex-shrink:0;" aria-label="Go to food scanner">
-        <svg viewBox="0 0 24 24" style="stroke:var(--c-primary)" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-        Try Scan Food
-      </a>
+      <p style="max-width:380px; font-size:16px;">
+        Filter through chef-developed, nutrient-dense recipes designed to nourish your body and delight your palate.
+      </p>
+    </div>
+
+    <!-- Category Pills -->
+    <div class="category-row" role="tablist" aria-label="Recipe categories">
+      <button class="cat-pill active" data-cat="all" role="tab" aria-selected="true">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        All Recipes
+      </button>
+      <button class="cat-pill" data-cat="breakfast" role="tab" aria-selected="false">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        Breakfast
+      </button>
+      <button class="cat-pill" data-cat="vegan" role="tab" aria-selected="false">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        Vegan & Plant
+      </button>
+      <button class="cat-pill" data-cat="quick" role="tab" aria-selected="false">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Under 15 Min
+      </button>
+      <button class="cat-pill" data-cat="pasta" role="tab" aria-selected="false">
+        <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+        Pasta
+      </button>
+      <button class="cat-pill" data-cat="salads" role="tab" aria-selected="false">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        Fresh Bowls
+      </button>
     </div>
   </div>
 </section>
 
+<!-- Wave Transition to Sand Base -->
+<div class="wave-divider wave-flip" style="color:var(--c-primary);" aria-hidden="true">
+  <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
+    <path fill="currentColor" d="M0,32L60,42.7C120,53,240,75,360,74.7C480,75,600,53,720,42.7C840,32,960,32,1080,42.7C1200,53,1320,75,1380,85.3L1440,96L1440,96L1380,96C1320,96,1200,96,1080,96C960,96,840,96,720,96C600,96,480,96,360,96C240,96,120,96,60,96L0,96Z"></path>
+  </svg>
+</div>
+
+<!-- ============================================================
+     RECIPES GRID SECTION
+     ============================================================ -->
+<section class="section" id="recipes">
+  <div class="container">
+    <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:36px; flex-wrap:wrap; gap:16px;">
+      <div>
+        <span class="sticker-badge rotate-left" style="margin-bottom:12px;">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Top Rated
+        </span>
+        <h2>Popular Recipes</h2>
+      </div>
+
+      <!-- Search Box -->
+      <div class="search-wrap" style="margin-bottom:0; width:100%; max-width:380px;">
+        <svg class="search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="search"
+               class="search-input"
+               id="search-input"
+               placeholder="Search by ingredient or title..."
+               aria-label="Search recipes" />
+      </div>
+    </div>
+
+    <!-- Grid of Recipe Cards -->
+    <div class="recipe-grid" id="recipe-grid" aria-live="polite">
+      <!-- Injected via JavaScript from RECIPES -->
+    </div>
+  </div>
+</section>
+
+<!-- Wave Transition to Dark Section -->
+<div class="wave-divider" style="color:var(--c-dark);" aria-hidden="true">
+  <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
+    <path fill="currentColor" d="M0,32L60,42.7C120,53,240,75,360,74.7C480,75,600,53,720,42.7C840,32,960,32,1080,42.7C1200,53,1320,75,1380,85.3L1440,96L1440,96L1380,96C1320,96,1200,96,1080,96C960,96,840,96,720,96C600,96,480,96,360,96C240,96,120,96,60,96L0,96Z"></path>
+  </svg>
+</div>
+
+<!-- ============================================================
+     SCAN FOOD CTA SECTION (Color-Block Dark Charcoal)
+     ============================================================ -->
+<section class="section color-block-dark" id="scan-cta">
+  <div class="container" style="text-align:center;">
+    <span class="sticker-badge rotate-right" style="background:var(--c-accent); color:var(--c-dark); margin-bottom:20px;">
+      <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      Instant Nutrition AI
+    </span>
+
+    <h2 style="max-width:800px; margin-inline:auto; margin-bottom:20px; font-size:clamp(3rem, 7vw, 5.4rem);">
+      Got a Plate of Food? Scan It in Seconds.
+    </h2>
+
+    <p style="max-width:540px; margin-inline:auto; margin-bottom:36px; font-size:17px; opacity:0.9;">
+      Snap or upload a photo of your meal. Our Gemini AI engine instantly analyzes calories, proteins, carbohydrates, healthy fats, and dietary fiber.
+    </p>
+
+    <div style="display:flex; justify-content:center; gap:16px; flex-wrap:wrap;">
+      <a href="scan.html" class="btn btn-accent btn-xl">
+        <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        Try Food Scanner Now
+      </a>
+      <a href="ingredients.html" class="btn btn-outline btn-xl" style="color:#ffffff; border-color:#ffffff;">
+        <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        Generate Custom Recipe
+      </a>
+    </div>
+  </div>
+</section>
 
 <!-- ============================================================
      FOOTER
      ============================================================ -->
-<footer class="footer" aria-label="Site footer">
+<footer class="footer" role="contentinfo">
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <div class="navbar-logo" style="margin-bottom:0;">
-          <div class="logo-icon" style="background:rgba(255,255,255,0.12);box-shadow:none;" aria-hidden="true">🥦</div>
-          <span class="logo-text">KookHealth</span>
-        </div>
-        <p>Discover healthy, delicious recipes based on what's already in your kitchen. Eat well, live well.</p>
+        <a href="index.html" class="navbar-logo" aria-label="KookHealth Home">
+          <div class="logo-brandmark" aria-hidden="true" style="background:var(--c-accent); color:var(--c-dark);">
+            <svg viewBox="0 0 32 32"><path d="M6 16c0 6.627 4.477 12 10 12s10-5.373 10-12H6z"/><path d="M16 6c0 4-3 6-3 6s2.5.5 4-1.5c1.5-2 1-4.5 1-4.5s-1 0-2 0z"/></svg>
+          </div>
+          <span class="logo-wordmark">Kook<span>Health</span></span>
+        </a>
+        <p>
+          Chef-crafted recipes and intelligent AI nutrition scanning built for modern, healthy living.
+        </p>
       </div>
+
       <div class="footer-col">
-        <h4>Explore</h4>
+        <h4>Discover</h4>
         <ul>
-          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html">Featured Recipes</a></li>
           <li><a href="ingredients.html">Find by Ingredients</a></li>
-          <li><a href="scan.html">Scan Food</a></li>
-          <li><a href="saved.html">Saved Recipes</a></li>
+          <li><a href="scan.html">Food Photo Scanner</a></li>
+          <li><a href="saved.html">Saved Collection</a></li>
         </ul>
       </div>
+
       <div class="footer-col">
         <h4>Categories</h4>
         <ul>
-          <li><a href="ingredients.html">Breakfast</a></li>
-          <li><a href="ingredients.html">Vegan</a></li>
-          <li><a href="ingredients.html">Quick Meals</a></li>
-          <li><a href="ingredients.html">Desserts</a></li>
+          <li><a href="index.html#categories">High Protein</a></li>
+          <li><a href="index.html#categories">Quick & Easy</a></li>
+          <li><a href="index.html#categories">Plant Based</a></li>
+          <li><a href="index.html#categories">Keto & Low Carb</a></li>
         </ul>
       </div>
+
       <div class="footer-col">
-        <h4>About</h4>
+        <h4>Technology</h4>
         <ul>
-          <li><a href="#">About Us</a></li>
-          <li><a href="#">Privacy Policy</a></li>
-          <li><a href="#">Terms of Service</a></li>
-          <li><a href="#">Contact</a></li>
+          <li><a href="https://deepmind.google/technologies/gemini/" target="_blank" rel="noopener">Gemini AI Engine</a></li>
+          <li><a href="https://fonts.google.com/specimen/Bebas+Neue" target="_blank" rel="noopener">Bebas Neue Typography</a></li>
+          <li><a href="https://expressjs.com" target="_blank" rel="noopener">Express API Server</a></li>
         </ul>
       </div>
     </div>
+
     <div class="footer-bottom">
-      <p>© 2026 KookHealth. Made with ❤️ for home cooks everywhere.</p>
-      <p>🌿 Eat fresh. Cook smart. Live healthy.</p>
+      <p>© 2026 KookHealth. Bold Nutrition & Smart Cooking.</p>
+      <p style="font-size:13px;">Designed with CRAV-inspired graphic typography & vector precision.</p>
     </div>
   </div>
 </footer>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="app.js?v=4"></script>
+<script src="app.js?v=5"></script>
 <script>
   initPage('home');
 
-  /* Render recipe grid with staggered reveal */
+  /* Render all recipes */
   const grid = document.getElementById('recipe-grid');
-  const recipeIds = ['breakfast','vegan','smoothie','pasta','chicken_salad','hero'];
-  grid.innerHTML = recipeIds.map(id => recipeCardHTML(RECIPES[id],'home')).join('');
-  init3DTilt();
+  const allList = Object.values(RECIPES);
 
-  /* Staggered card float-in */
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach((entry, i) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => entry.target.classList.add('float-up'), i * 70);
-        obs.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.08 });
-  document.querySelectorAll('.recipe-card').forEach(c => obs.observe(c));
+  function renderGrid(recipes) {
+    if (!recipes.length) {
+      grid.innerHTML = `
+        <div style="grid-column:1/-1; text-align:center; padding:56px 20px;">
+          <h3 style="font-size:32px; color:var(--c-dark); margin-bottom:8px;">No Matching Recipes</h3>
+          <p style="color:var(--c-muted); font-size:16px;">Try adjusting your search or category filter.</p>
+        </div>`;
+      return;
+    }
+    grid.innerHTML = recipes.map(r => recipeCardHTML(r, 'home')).join('');
+  }
 
-  /* Search input → ingredients page */
-  document.getElementById('search-input').addEventListener('keydown', e => {
-    if (e.key === 'Enter') window.location.href = 'ingredients.html';
+  renderGrid(allList);
+
+  /* Search filtering */
+  document.getElementById('search-input').addEventListener('input', e => {
+    const q = e.target.value.toLowerCase().trim();
+    if (!q) { renderGrid(allList); return; }
+    const filtered = allList.filter(r =>
+      r.title.toLowerCase().includes(q) ||
+      r.tag.toLowerCase().includes(q) ||
+      r.ingredients.some(ing => ing.name.toLowerCase().includes(q))
+    );
+    renderGrid(filtered);
   });
 
-  /* Navbar compact on scroll */
-  const navbar = document.getElementById('navbar');
-  window.addEventListener('scroll', () => {
-    navbar.classList.toggle('compact', window.scrollY > 48);
-  }, { passive: true });
-
-  /* Mobile theme toggle */
-  document.getElementById('theme-toggle-mobile')?.addEventListener('click', toggleTheme);
+  /* Category pills */
+  document.querySelectorAll('.cat-pill').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.cat-pill').forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+      const cat = btn.dataset.cat;
+      if (cat === 'all') {
+        renderGrid(allList);
+      } else {
+        const filtered = allList.filter(r => r.tag.toLowerCase() === cat || r.title.toLowerCase().includes(cat));
+        renderGrid(filtered);
+      }
+    });
+  });
 </script>
 </body>
 </html>

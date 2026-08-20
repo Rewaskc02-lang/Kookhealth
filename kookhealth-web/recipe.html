@@ -3,74 +3,35 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KookHealth — Recipe Detail</title>
-  <meta name="description" content="Detailed recipe with ingredients, step-by-step instructions, and nutritional info." />
+  <title>Recipe Detail — KookHealth</title>
+  <meta name="description" content="Step-by-step healthy recipe instructions, ingredients, prep time, and nutrition facts." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=4" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=5" />
   <style>
-    .recipe-tags { display: flex; flex-wrap: wrap; gap: 9px; }
-    .recipe-tag-pill {
-      padding: 6px 14px;
-      border-radius: var(--r-pill);
-      font-size: 12px;
-      font-weight: 800;
-      background: var(--c-tag-bg);
-      color: var(--c-tag-txt);
-      border: 1px solid hsl(from var(--c-primary) h s l / 0.2);
-    }
-    .rating-row { display: flex; align-items: center; gap: 8px; }
-    .rating-stars { display: flex; gap: 3px; }
-    .rating-stars svg { width: 18px; height: 18px; }
-    .rating-count { font-size: 14px; color: var(--c-muted); font-weight: 700; }
-    .save-row { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; margin-top: 8px; }
-    .share-btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 14px 24px;
-      border-radius: var(--r-pill);
-      border: 1.5px solid var(--c-card-border);
+    .recipe-progress-wrap {
+      margin-bottom: 24px;
+      padding: 16px 20px;
       background: var(--c-surf);
-      font-size: 14px; font-weight: 800;
-      color: var(--c-text-2);
-      cursor: pointer;
-      box-shadow: var(--shadow-xs);
-      transition: all var(--t-spring) !important;
+      border: 2px solid var(--c-dark);
+      border-radius: var(--r-md);
+      box-shadow: 3px 4px 0px var(--c-dark);
     }
-    .share-btn:hover {
-      border-color: var(--c-primary);
-      color: var(--c-primary);
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-sm);
-    }
-    .progress-bar {
-      height: 8px;
+    .progress-bar-track {
+      height: 10px;
       background: var(--c-bg2);
       border-radius: var(--r-pill);
+      border: 1.5px solid var(--c-dark);
       overflow: hidden;
-      margin-top: 6px;
-      box-shadow: inset 0 1px 2px rgba(0,0,0,0.08);
+      margin-top: 8px;
     }
-    .progress-fill {
+    .progress-bar-fill {
       height: 100%;
-      background: var(--gradient-btn);
-      border-radius: var(--r-pill);
-      box-shadow: 0 0 12px var(--c-primary-glow);
-      transition: width 0.5s var(--t-spring) !important;
+      background: var(--c-primary);
+      width: 0%;
+      transition: width 0.35s var(--t-spring);
     }
-    .ing-progress {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-      padding: 12px 18px;
-      background: var(--c-surf);
-      border-radius: var(--r-md);
-      border: 1.5px solid var(--c-card-border);
-      box-shadow: var(--shadow-xs);
-    }
-    .ing-progress-lbl { font-size: 13px; font-weight: 700; color: var(--c-muted); }
-    .ing-progress-count { font-size: 14px; font-weight: 900; color: var(--c-primary); }
   </style>
 </head>
 <body>
@@ -78,333 +39,348 @@
 <!-- NAVBAR -->
 <nav class="navbar" id="navbar" aria-label="Main navigation">
   <div class="container navbar-inner">
-    <a href="index.html" class="navbar-logo" aria-label="KookHealth home">
-      <div class="logo-icon" aria-hidden="true">🥦</div>
-      <span class="logo-text">KookHealth</span>
+    <a href="index.html" class="navbar-logo" aria-label="KookHealth Home">
+      <div class="logo-brandmark" aria-hidden="true">
+        <svg viewBox="0 0 32 32">
+          <path d="M6 16c0 6.627 4.477 12 10 12s10-5.373 10-12H6z"/>
+          <path d="M16 6c0 4-3 6-3 6s2.5.5 4-1.5c1.5-2 1-4.5 1-4.5s-1 0-2 0z"/>
+          <path d="M21 8c0 3-2 4.5-2 4.5s2 .5 3-1c1-1.5.5-3.5.5-3.5z"/>
+        </svg>
+      </div>
+      <span class="logo-wordmark">Kook<span>Health</span></span>
     </a>
+
     <div class="navbar-nav">
-      <a href="index.html"       class="nav-link" data-page="home">Home</a>
-      <a href="ingredients.html" class="nav-link" data-page="ingredients">Ingredients</a>
-      <a href="scan.html"        class="nav-link" data-page="scan">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      <a href="index.html" class="nav-link" data-page="home">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Home
+      </a>
+      <a href="ingredients.html" class="nav-link" data-page="ingredients">
+        <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        Ingredients
+      </a>
+      <a href="scan.html" class="nav-link" data-page="scan">
+        <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
         Scan Food
       </a>
       <a href="saved.html" class="nav-link" data-page="saved">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-        Saved Recipes
+        <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        Saved
         <span class="nav-badge" data-saved-count id="nav-saved-count">0</span>
       </a>
     </div>
+
     <div class="navbar-right">
-      <div class="theme-toggle" id="theme-toggle" role="switch" aria-checked="false" tabindex="0" aria-label="Toggle colour theme">
-        <span class="theme-icon">🌅</span>
+      <div class="theme-toggle" id="theme-toggle" role="switch" aria-checked="false" tabindex="0" aria-label="Toggle color theme">
+        <svg class="theme-icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
         <div class="t-track" aria-hidden="true"><div class="t-knob"></div></div>
-        <span class="theme-icon">🌿</span>
         <span class="theme-label">Warm</span>
       </div>
     </div>
-    <button class="hamburger" id="hamburger" aria-label="Open navigation menu" aria-expanded="false">
-      <svg viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18" stroke-linecap="round"/></svg>
+
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     </button>
   </div>
 </nav>
-<div class="mobile-nav" id="mobile-nav">
-  <a href="index.html"       class="nav-link" data-page="home">🏠 Home</a>
-  <a href="ingredients.html" class="nav-link" data-page="ingredients">🧺 Ingredients</a>
-  <a href="scan.html"        class="nav-link" data-page="scan">📷 Scan Food</a>
-  <a href="saved.html"       class="nav-link" data-page="saved">🔖 Saved Recipes</a>
+
+<!-- Mobile Nav Drawer -->
+<div class="mobile-nav" id="mobile-nav" aria-label="Mobile navigation">
+  <a href="index.html" class="nav-link" data-page="home">Home</a>
+  <a href="ingredients.html" class="nav-link" data-page="ingredients">Ingredients</a>
+  <a href="scan.html" class="nav-link" data-page="scan">Scan Food</a>
+  <a href="saved.html" class="nav-link" data-page="saved">Saved Recipes</a>
 </div>
 
-<main>
-  <div class="container" id="recipe-container" style="padding-top:40px;padding-bottom:60px;">
+<main class="section" id="recipe-main">
+  <div class="container">
 
-    <!-- Breadcrumb + back -->
-    <nav class="breadcrumb" aria-label="Breadcrumb" id="breadcrumb">
-      <a href="index.html">Home</a>
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span id="breadcrumb-parent">Recipes</span>
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span id="breadcrumb-current" aria-current="page">Loading…</span>
-    </nav>
-
-    <!-- Hero: Image + Info -->
-    <div class="recipe-detail-hero" id="recipe-hero">
-      <!-- Populated by JS -->
+    <!-- Breadcrumbs -->
+    <div class="breadcrumb" style="display:flex; align-items:center; gap:8px; margin-bottom:28px; font-weight:700; font-size:14px; text-transform:uppercase;">
+      <a href="index.html" id="back-link" style="display:inline-flex; align-items:center; gap:6px; color:var(--c-primary);">
+        <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;stroke-width:2.5;fill:none;"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        <span id="back-text">Back to Home</span>
+      </a>
+      <span style="color:var(--c-muted);">/</span>
+      <span id="crumb-title" style="color:var(--c-dark);">Recipe Detail</span>
     </div>
 
-    <!-- Body: Ingredients + Steps -->
-    <div class="recipe-body" id="recipe-body">
-      <!-- Populated by JS -->
+    <!-- Recipe Hero Banner -->
+    <div class="recipe-detail-hero">
+      <div class="recipe-detail-image">
+        <img id="r-img" src="" alt="" />
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:20px;">
+        <span class="sticker-badge rotate-left" id="r-tag" style="background:var(--c-accent); color:var(--c-dark); align-self:flex-start;">
+          Healthy Dish
+        </span>
+
+        <h1 class="recipe-detail-title" id="r-title">Loading Recipe...</h1>
+        <p style="font-size:17px; color:var(--c-text-2); line-height:1.65;" id="r-desc"></p>
+
+        <!-- 4-Tile Meta Grid -->
+        <div class="recipe-meta-grid">
+          <div class="recipe-meta-card">
+            <svg class="meta-icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span class="meta-val" id="r-prep">-</span>
+            <span class="meta-lbl">Prep Time</span>
+          </div>
+
+          <div class="recipe-meta-card">
+            <svg class="meta-icon-svg" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            <span class="meta-val" id="r-cook">-</span>
+            <span class="meta-lbl">Cook Time</span>
+          </div>
+
+          <div class="recipe-meta-card">
+            <svg class="meta-icon-svg" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>
+            <span class="meta-val" id="r-serve">-</span>
+            <span class="meta-lbl">Servings</span>
+          </div>
+
+          <div class="recipe-meta-card">
+            <svg class="meta-icon-svg" viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>
+            <span class="meta-val" id="r-cal">-</span>
+            <span class="meta-lbl">Calories</span>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="display:flex; gap:14px; flex-wrap:wrap; margin-top:8px;">
+          <button class="btn btn-primary btn-lg" id="save-recipe-btn">
+            <svg id="save-btn-icon" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            <span id="save-btn-label">Save Recipe</span>
+          </button>
+          <button class="btn btn-ghost btn-lg" id="share-btn">
+            <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            Share Recipe
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recipe Body (Checklist & Timeline Steps) -->
+    <div class="recipe-body">
+
+      <!-- Left Column: Ingredients Checklist -->
+      <div class="ing-panel">
+        <h2 class="recipe-section-title">
+          <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          Ingredients
+        </h2>
+
+        <!-- Progress Tracker -->
+        <div class="recipe-progress-wrap">
+          <div style="display:flex; justify-content:space-between; font-weight:800; font-size:13px; text-transform:uppercase;">
+            <span>Mise en Place</span>
+            <span id="progress-text">0 / 0 Prepared</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="progress-fill"></div>
+          </div>
+        </div>
+
+        <div id="ingredients-list" role="list">
+          <!-- Injected Items -->
+        </div>
+      </div>
+
+      <!-- Right Column: Preparation Steps -->
+      <div class="ing-panel">
+        <h2 class="recipe-section-title">
+          <svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          Instructions
+        </h2>
+        <div id="steps-list">
+          <!-- Injected Step Cards -->
+        </div>
+      </div>
+
     </div>
 
   </div>
 </main>
 
 <!-- FOOTER -->
-<footer class="footer" aria-label="Site footer">
+<footer class="footer" role="contentinfo">
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <div class="navbar-logo" style="margin-bottom:0">
-          <div class="logo-icon" style="background:rgba(255,255,255,0.12);box-shadow:none;" aria-hidden="true">🥦</div>
-          <span class="logo-text">KookHealth</span>
-        </div>
-        <p>Discover healthy, delicious recipes based on what's already in your kitchen.</p>
+        <a href="index.html" class="navbar-logo" aria-label="KookHealth Home">
+          <div class="logo-brandmark" aria-hidden="true" style="background:var(--c-accent); color:var(--c-dark);">
+            <svg viewBox="0 0 32 32"><path d="M6 16c0 6.627 4.477 12 10 12s10-5.373 10-12H6z"/><path d="M16 6c0 4-3 6-3 6s2.5.5 4-1.5c1.5-2 1-4.5 1-4.5s-1 0-2 0z"/></svg>
+          </div>
+          <span class="logo-wordmark">Kook<span>Health</span></span>
+        </a>
+        <p>Chef-crafted recipes and intelligent AI nutrition scanning built for modern, healthy living.</p>
       </div>
-      <div class="footer-col"><h4>Explore</h4><ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="ingredients.html">Find by Ingredients</a></li>
-        <li><a href="scan.html">Scan Food</a></li>
-        <li><a href="saved.html">Saved Recipes</a></li>
-      </ul></div>
-      <div class="footer-col"><h4>Categories</h4><ul>
-        <li><a href="ingredients.html">Breakfast</a></li>
-        <li><a href="ingredients.html">Vegan</a></li>
-        <li><a href="ingredients.html">Quick Meals</a></li>
-        <li><a href="ingredients.html">Desserts</a></li>
-      </ul></div>
-      <div class="footer-col"><h4>About</h4><ul>
-        <li><a href="#">About Us</a></li>
-        <li><a href="#">Privacy Policy</a></li>
-        <li><a href="#">Contact</a></li>
-      </ul></div>
+      <div class="footer-col">
+        <h4>Discover</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="ingredients.html">Find by Ingredients</a></li>
+          <li><a href="scan.html">Food Photo Scanner</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Collection</h4>
+        <ul>
+          <li><a href="saved.html">Saved Recipes</a></li>
+          <li><a href="index.html#categories">Top Rated</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Technology</h4>
+        <ul>
+          <li><a href="https://deepmind.google/technologies/gemini/" target="_blank" rel="noopener">Gemini AI Engine</a></li>
+          <li><a href="https://fonts.google.com/specimen/Bebas+Neue" target="_blank" rel="noopener">Bebas Neue</a></li>
+        </ul>
+      </div>
     </div>
     <div class="footer-bottom">
-      <p>© 2026 KookHealth. Made with ❤️ for home cooks everywhere.</p>
-      <p>🌿 Eat fresh. Cook smart. Live healthy.</p>
+      <p>© 2026 KookHealth. Bold Nutrition & Smart Cooking.</p>
     </div>
   </div>
 </footer>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="app.js?v=4"></script>
+<script src="app.js?v=5"></script>
 <script>
   initPage(null);
 
-  const id      = getParam('id');
-  const from    = getParam('from') || 'home';
-  const isAI    = getParam('ai') === '1';
+  const recipeId = getParam('id') || 'hero';
+  const fromPage = getParam('from') || 'home';
 
-  /* ── Resolve recipe data ── */
-  let recipe;
-  let aiData = null;
+  /* Back button setup */
+  const backLink = document.getElementById('back-link');
+  const backText = document.getElementById('back-text');
+  if (fromPage === 'ingredients') {
+    backLink.href = 'ingredients.html';
+    backText.textContent = 'Back to Ingredients';
+  } else if (fromPage === 'saved') {
+    backLink.href = 'saved.html';
+    backText.textContent = 'Back to Saved';
+  }
 
-  if (isAI && !id) {
-    // AI-generated recipe stored in sessionStorage
+  let currentRecipe = null;
+
+  if (recipeId === 'ai') {
     try {
-      aiData = JSON.parse(sessionStorage.getItem('kookhealth-ai-recipe') || 'null');
-    } catch {}
+      currentRecipe = JSON.parse(sessionStorage.getItem('kookhealth-ai-recipe'));
+      if (currentRecipe) {
+        currentRecipe.id = 'ai';
+        if (!currentRecipe.img) {
+          currentRecipe.img = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=1000&auto=format&fit=crop&q=80';
+        }
+      }
+    } catch (e) { currentRecipe = null; }
   }
 
-  if (aiData) {
-    // Map Gemini shape → internal shape
-    recipe = {
-      id:          'ai-generated',
-      title:       aiData.recipeName || 'AI Generated Recipe',
-      description: `A unique recipe crafted just for you using: ${(aiData._ingredients || []).join(', ')}.`,
-      img:         'hero_recipe.png', // placeholder
-      alt:         aiData.recipeName,
-      tags:        aiData.tags || ['AI Recipe'],
-      prep:        aiData.cookingTime || '—',
-      cook:        aiData.cookingTime || '—',
-      serve:       aiData.servings   || '—',
-      cal:         aiData.calories   || '—',
-      difficulty:  aiData.difficulty || '—',
-      rating:      '5.0',
-      reviews:     '1',
-      ingredients: (aiData.ingredients || []).map(i => ({
-        name:   i.item     || i.name     || '',
-        amount: i.quantity || i.amount   || '',
-      })),
-      steps: aiData.steps || [],
-    };
-  } else {
-    recipe = RECIPES[id] || RECIPES['hero'];
+  if (!currentRecipe) {
+    currentRecipe = RECIPES[recipeId] || RECIPES.hero;
   }
 
-  /* ── Breadcrumb ── */
-  const fromLabel  = { home: 'Popular Recipes', ingredients: 'Ingredient Search', saved: 'Saved Recipes' };
-  const fromHref   = { home: 'index.html', ingredients: 'ingredients.html', saved: 'saved.html' };
-  document.getElementById('breadcrumb-current').textContent = recipe.title;
-  const parentEl = document.getElementById('breadcrumb-parent');
-  parentEl.innerHTML = `<a href="${fromHref[from] || 'index.html'}">${fromLabel[from] || 'Recipes'}</a>`;
-  document.title = `KookHealth — ${recipe.title}`;
+  /* Populate recipe data */
+  document.title = `${currentRecipe.title} — KookHealth`;
+  document.getElementById('crumb-title').textContent = currentRecipe.title;
+  document.getElementById('r-title').textContent = currentRecipe.title;
+  document.getElementById('r-tag').textContent = currentRecipe.tag || 'AI Generated';
+  document.getElementById('r-desc').textContent = currentRecipe.desc || '';
+  document.getElementById('r-img').src = currentRecipe.img;
+  document.getElementById('r-img').alt = currentRecipe.title;
 
-  /* ── Save state ── */
-  const recipeId = recipe.id || id || 'hero';
-  let saved = isRecipeSaved(recipeId);
+  document.getElementById('r-prep').textContent = currentRecipe.prep || '5m';
+  document.getElementById('r-cook').textContent = currentRecipe.cook || '15m';
+  document.getElementById('r-serve').textContent = currentRecipe.serve || '2';
+  document.getElementById('r-cal').textContent = `${currentRecipe.cal || '350'} kcal`;
 
-  /* ── Rating stars HTML ── */
-  function starsHTML(rating) {
-    const full = Math.floor(parseFloat(rating));
-    return Array.from({length: 5}, (_, i) =>
-      `<svg viewBox="0 0 24 24" fill="${i < full ? 'var(--c-star)' : 'none'}" stroke="var(--c-star)" stroke-width="1.5">
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-      </svg>`).join('');
-  }
-
-  /* ── Render hero ── */
-  document.getElementById('recipe-hero').innerHTML = `
-    <div class="recipe-detail-image">
-      <img src="${recipe.img}" alt="${recipe.alt}" />
-    </div>
-    <div class="recipe-detail-info">
-      <div class="recipe-tags" style="align-items:center;">
-        ${recipe.tags.map(t => `<span class="recipe-tag-pill">${t}</span>`).join('')}
-        ${getParam('ai') === '1' ? '<span class="ai-badge">&#10024; AI Generated</span>' : ''}
-      </div>
-      <h1 class="recipe-detail-title animate-title">${recipe.title}</h1>
-      <p class="recipe-detail-desc">${recipe.description}</p>
-      <div class="rating-row">
-        <div class="rating-stars" aria-label="${recipe.rating} out of 5 stars">${starsHTML(recipe.rating)}</div>
-        <span class="rating-count">⭐ ${recipe.rating} · ${recipe.reviews} reviews</span>
-      </div>
-      <div class="recipe-meta-grid">
-        <div class="recipe-meta-card">
-          <span class="meta-icon">⏱️</span>
-          <span class="meta-val">${recipe.prep}</span>
-          <span class="meta-lbl">Prep Time</span>
-        </div>
-        <div class="recipe-meta-card">
-          <span class="meta-icon">🔥</span>
-          <span class="meta-val">${recipe.cook}</span>
-          <span class="meta-lbl">Cook Time</span>
-        </div>
-        <div class="recipe-meta-card">
-          <span class="meta-icon">👥</span>
-          <span class="meta-val">${recipe.serve}</span>
-          <span class="meta-lbl">Servings</span>
-        </div>
-        <div class="recipe-meta-card">
-          <span class="meta-icon">💪</span>
-          <span class="meta-val">${recipe.cal}</span>
-          <span class="meta-lbl">kcal/serving</span>
-        </div>
-      </div>
-      <div class="save-row">
-        <button class="btn btn-primary btn-lg ${saved ? 'save-btn-saved' : ''}" id="save-btn"
-          aria-label="${saved ? 'Recipe saved' : 'Save this recipe'}"
-          aria-pressed="${saved}">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" ${saved ? 'fill="white"' : ''}/>
-          </svg>
-          ${saved ? '✓ Saved' : 'Save Recipe'}
-        </button>
-        <button class="share-btn" id="share-btn" aria-label="Share recipe">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
-            <path d="m8.59 13.51 6.83 3.98M15.41 6.51 8.59 10.49"/>
-          </svg>
-          Share
-        </button>
-      </div>
-    </div>`;
-
-  /* ── Render body ── */
+  /* Render Ingredients Checklist */
+  const ingList = document.getElementById('ingredients-list');
+  const items = currentRecipe.ingredients || [];
   let checkedCount = 0;
-  const total = recipe.ingredients.length;
 
-  function ingItemHTML(ing, index) {
-    return `<div class="ingredient-item" data-index="${index}" role="checkbox" aria-checked="false" tabindex="0" aria-label="${ing.amount} ${ing.name}">
+  function updateProgress() {
+    const text = document.getElementById('progress-text');
+    const fill = document.getElementById('progress-fill');
+    text.textContent = `${checkedCount} / ${items.length} Prepared`;
+    fill.style.width = `${items.length ? (checkedCount / items.length) * 100 : 0}%`;
+  }
+
+  ingList.innerHTML = items.map((ing, i) => `
+    <div class="ingredient-item" id="ing-item-${i}" role="listitem" tabindex="0">
       <div class="ing-checkbox">
-        <svg viewBox="0 0 24 24"><path d="m5 12 5 5L20 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
       </div>
       <span class="ing-name">${ing.name}</span>
       <span class="ing-amount">${ing.amount}</span>
-    </div>`;
-  }
-
-  document.getElementById('recipe-body').innerHTML = `
-    <div>
-      <h2 class="recipe-section-title">
-        <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/></svg>
-        Ingredients
-      </h2>
-      <div class="ing-progress">
-        <span class="ing-progress-lbl">Check off as you go</span>
-        <span class="ing-progress-count" id="ing-progress-count">0 / ${total}</span>
-      </div>
-      <div class="progress-bar" aria-label="Ingredient progress">
-        <div class="progress-fill" id="progress-fill" style="width:0%" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-      </div>
-      <div style="margin-top:12px;" id="ing-list">
-        ${recipe.ingredients.map((ing, i) => ingItemHTML(ing, i)).join('')}
-      </div>
     </div>
-    <div>
-      <h2 class="recipe-section-title">
-        <svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
-        Instructions
-      </h2>
-      <div id="steps-list">
-        ${recipe.steps.map((step, i) => `
-          <div class="step-item stagger-item" style="--stagger:${i}" aria-label="Step ${i+1}">
-            <div class="step-num" aria-hidden="true">${i+1}</div>
-            <p class="step-text">${step}</p>
-          </div>`).join('')}
-      </div>
-    </div>`;
+  `).join('');
 
-  /* ── Ingredient checkbox ── */
-  document.getElementById('ing-list').addEventListener('click', e => {
-    const item = e.target.closest('.ingredient-item');
-    if (!item) return;
-    toggleIngredientCheck(item);
+  ingList.querySelectorAll('.ingredient-item').forEach((item) => {
+    item.addEventListener('click', () => {
+      const isChecked = item.classList.toggle('checked');
+      checkedCount += isChecked ? 1 : -1;
+      updateProgress();
+    });
   });
-  document.getElementById('ing-list').addEventListener('keydown', e => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      const item = e.target.closest('.ingredient-item');
-      if (item) toggleIngredientCheck(item);
+
+  updateProgress();
+
+  /* Render Instructions */
+  const stepsList = document.getElementById('steps-list');
+  const steps = currentRecipe.steps || [];
+  stepsList.innerHTML = steps.map((step, i) => `
+    <div class="step-item">
+      <div class="step-num">${i + 1}</div>
+      <div class="step-text">${step}</div>
+    </div>
+  `).join('');
+
+  /* Save Recipe Button */
+  const saveBtn = document.getElementById('save-recipe-btn');
+  const saveLabel = document.getElementById('save-btn-label');
+  const saveIcon = document.getElementById('save-btn-icon');
+
+  function updateSaveButton() {
+    const saved = isRecipeSaved(currentRecipe.id);
+    if (saved) {
+      saveBtn.classList.remove('btn-primary');
+      saveBtn.classList.add('btn-accent');
+      saveLabel.textContent = 'Saved in Cookbook';
+      saveIcon.style.fill = 'currentColor';
+    } else {
+      saveBtn.classList.remove('btn-accent');
+      saveBtn.classList.add('btn-primary');
+      saveLabel.textContent = 'Save Recipe';
+      saveIcon.style.fill = 'none';
     }
-  });
-
-  function toggleIngredientCheck(item) {
-    const checked = item.classList.toggle('checked');
-    item.setAttribute('aria-checked', checked);
-    checkedCount += checked ? 1 : -1;
-    const pct = Math.round((checkedCount / total) * 100);
-    document.getElementById('ing-progress-count').textContent = `${checkedCount} / ${total}`;
-    const fill = document.getElementById('progress-fill');
-    fill.style.width = pct + '%';
-    fill.setAttribute('aria-valuenow', pct);
-    if (checkedCount === total) showToast('🎉 All ingredients checked — ready to cook!');
   }
 
-  /* ── Save button ── */
-  document.getElementById('save-btn').addEventListener('click', () => {
-    saved = !saved;
-    const btn = document.getElementById('save-btn');
-    if (saved) {
-      saveRecipeId(recipeId);
-      btn.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" fill="white"/></svg> ✓ Saved`;
-      btn.classList.add('save-btn-saved');
-      btn.setAttribute('aria-pressed', 'true');
-      showToast('🔖 Recipe saved to your collection!');
-    } else {
-      unsaveRecipeId(recipeId);
-      btn.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg> Save Recipe`;
-      btn.classList.remove('save-btn-saved');
-      btn.setAttribute('aria-pressed', 'false');
+  updateSaveButton();
+
+  saveBtn.addEventListener('click', () => {
+    if (isRecipeSaved(currentRecipe.id)) {
+      unsaveRecipeId(currentRecipe.id);
       showToast('Removed from saved recipes');
+    } else {
+      saveRecipeId(currentRecipe.id);
+      showToast('Saved to your personal cookbook');
     }
     updateNavBadge();
+    updateSaveButton();
   });
 
-  /* ── Share button ── */
-  document.getElementById('share-btn').addEventListener('click', async () => {
-    const url = window.location.href;
-    if (navigator.share) {
-      try { await navigator.share({ title: recipe.title, url }); }
-      catch {}
+  /* Share Button */
+  document.getElementById('share-btn').addEventListener('click', () => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(window.location.href);
+      showToast('Recipe URL copied to clipboard');
     } else {
-      navigator.clipboard.writeText(url).then(() => showToast('🔗 Link copied to clipboard!'));
+      showToast('Recipe ready to share');
     }
   });
-
-  /* Initialize 3D tilt on recipe meta tiles */
-  init3DTilt();
 </script>
 </body>
 </html>
