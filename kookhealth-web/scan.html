@@ -7,82 +7,89 @@
   <meta name="description" content="Upload a photo of your meal and instantly see its calorie count, macros breakdown, and health tags powered by AI." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=4" />
   <style>
-    /* Animated gradient border on upload zone */
     .upload-zone { outline: none; }
-    .upload-zone:focus { box-shadow: 0 0 0 3px hsl(from var(--c-primary) h s l / 0.22) !important; }
+    .upload-zone:focus { box-shadow: 0 0 0 4px var(--c-primary-glow) !important; }
 
-    /* Nutrient card accent colours (theme-independent) */
-    .nc-protein { border-color: #BFDBFE !important; }
-    .nc-protein .nutrient-icon { filter: hue-rotate(200deg); }
+    /* Nutrient card accent colours */
+    .nc-protein { border-color: hsl(217, 85%, 85%) !important; background: hsl(217, 90%, 98%) !important; }
     .nc-protein .nutrient-val  { color: #1D4ED8; }
-    .nc-carbs   { border-color: #FDE68A !important; }
+    .nc-carbs   { border-color: hsl(38, 90%, 82%) !important; background: hsl(38, 100%, 98%) !important; }
     .nc-carbs   .nutrient-val  { color: #D97706; }
-    .nc-fat     { border-color: #FECACA !important; }
+    .nc-fat     { border-color: hsl(0, 85%, 88%) !important; background: hsl(0, 100%, 98%) !important; }
     .nc-fat     .nutrient-val  { color: #DC2626; }
-    .nc-fiber   { border-color: #A7F3D0 !important; }
+    .nc-fiber   { border-color: hsl(152, 60%, 82%) !important; background: hsl(152, 60%, 97%) !important; }
     .nc-fiber   .nutrient-val  { color: #059669; }
-    .nc-sugar   { border-color: #FBCFE8 !important; }
+    .nc-sugar   { border-color: hsl(330, 80%, 88%) !important; background: hsl(330, 90%, 98%) !important; }
     .nc-sugar   .nutrient-val  { color: #DB2777; }
 
     /* Preview card label strip */
     .preview-label {
       position: absolute;
       bottom: 0; left: 0; right: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
-      padding: 20px 24px 16px;
+      background: linear-gradient(to top, rgba(10, 14, 20, 0.88) 0%, rgba(10, 14, 20, 0.4) 60%, transparent 100%);
+      padding: 28px 28px 20px;
       color: white;
+      backdrop-filter: blur(6px);
     }
-    .preview-label h3 { margin: 0; font-size: 1.1rem; font-weight: 800; }
-    .preview-label p  { margin: 4px 0 0; font-size: 13px; opacity: 0.8; }
+    .preview-label h3 { margin: 0; font-size: 1.25rem; font-weight: 900; letter-spacing: -0.03em; }
+    .preview-label p  { margin: 4px 0 0; font-size: 13px; opacity: 0.85; font-weight: 600; }
 
     .webcam-btn {
       display: inline-flex; align-items: center; gap: 8px;
-      padding: 12px 22px;
+      padding: 14px 24px;
       border-radius: var(--r-pill);
-      font-size: 14px; font-weight: 700;
+      font-size: 14px; font-weight: 800;
       cursor: pointer;
-      border: 1.5px solid var(--c-border);
+      border: 1.5px solid var(--c-card-border);
       background: var(--c-surf);
-      color: var(--c-muted);
+      color: var(--c-text-2);
       font-family: inherit;
-      transition: all 0.2s ease !important;
+      box-shadow: var(--shadow-xs);
+      transition: all var(--t-spring) !important;
     }
-    .webcam-btn:hover { border-color: var(--c-primary); color: var(--c-primary); background: var(--c-primary-l); }
+    .webcam-btn:hover {
+      border-color: var(--c-primary);
+      color: var(--c-primary);
+      background: var(--c-primary-l);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
 
-    /* Diary saved list */
+    /* Diary saved banner */
     .diary-saved {
       display: none;
-      background: hsl(142,50%,95%);
-      border: 1.5px solid hsl(142,50%,72%);
+      background: hsl(146, 54%, 96%);
+      border: 1.5px solid hsl(146, 54%, 76%);
       border-radius: var(--r-lg);
-      padding: 18px 20px;
-      display: none;
+      padding: 18px 22px;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
       margin-top: 24px;
-      font-size: 14px;
-      font-weight: 700;
-      color: hsl(142,50%,25%);
+      font-size: 15px;
+      font-weight: 800;
+      color: hsl(146, 54%, 25%);
+      box-shadow: 0 4px 16px hsl(146 54% 40% / 0.12);
+      animation: float-up 0.4s var(--t-spring) both;
     }
     .diary-saved.show { display: flex; }
-    .diary-saved svg { width: 22px; height: 22px; stroke: hsl(142,50%,35%); fill: none; stroke-width: 2.2; flex-shrink: 0; }
+    .diary-saved svg { width: 24px; height: 24px; stroke: hsl(146, 54%, 35%); fill: none; stroke-width: 2.5; flex-shrink: 0; }
 
     /* Demo hint */
     .demo-hint {
-      display: flex;
+      display: inline-flex;
       align-items: center;
       gap: 10px;
       background: var(--c-surf2);
-      border: 1px solid var(--c-border);
-      border-radius: var(--r-md);
-      padding: 12px 16px;
+      border: 1px solid var(--c-card-border);
+      border-radius: var(--r-pill);
+      padding: 10px 20px;
       font-size: 13px;
       color: var(--c-muted);
-      font-weight: 500;
-      margin-top: 16px;
+      font-weight: 600;
+      margin-top: 20px;
     }
   </style>
 </head>
@@ -348,7 +355,7 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="app.js"></script>
+<script src="app.js?v=4"></script>
 <script>
   initPage('scan');
 
@@ -533,6 +540,7 @@
 
     nutritionResult.classList.add('show');
     nutritionResult.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    init3DTilt();
     showToast(`✅ Analysis complete — ${data.calories ?? '?'} kcal detected!`);
   }
 

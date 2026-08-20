@@ -7,58 +7,70 @@
   <meta name="description" content="Your personally saved healthy recipes, all in one place. Access anytime, anywhere." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=4" />
   <style>
     .saved-grid-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 28px;
+      margin-bottom: 32px;
       flex-wrap: wrap;
-      gap: 12px;
+      gap: 14px;
     }
     .saved-count-badge {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 6px 16px;
+      padding: 8px 18px;
       background: var(--c-tag-bg);
       color: var(--c-tag-txt);
       border-radius: var(--r-pill);
       font-size: 14px;
-      font-weight: 700;
+      font-weight: 800;
+      border: 1px solid hsl(from var(--c-primary) h s l / 0.2);
+      box-shadow: var(--shadow-xs);
     }
     .clear-btn {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 8px 16px;
+      gap: 8px;
+      padding: 10px 20px;
       border-radius: var(--r-pill);
-      border: 1.5px solid var(--c-border);
+      border: 1.5px solid var(--c-card-border);
       background: var(--c-surf);
       font-size: 13px;
-      font-weight: 700;
+      font-weight: 800;
       color: var(--c-muted);
       cursor: pointer;
       font-family: inherit;
-      transition: all 0.2s ease !important;
+      box-shadow: var(--shadow-xs);
+      transition: all var(--t-spring) !important;
     }
-    .clear-btn:hover { border-color: #EF4444; color: #EF4444; background: #FEF2F2; }
+    .clear-btn:hover {
+      border-color: #EF4444;
+      color: #EF4444;
+      background: #FEF2F2;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(239, 68, 68, 0.2);
+    }
 
-    /* Save indicator on card (bookmark icon overlay) */
+    /* Save indicator on card (3D bookmark badge) */
     .recipe-card .saved-marker {
       position: absolute;
-      top: 12px; right: 12px;
-      width: 32px; height: 32px;
+      top: 14px; right: 14px;
+      width: 36px; height: 36px;
       border-radius: 50%;
-      background: rgba(255,255,255,0.92);
-      backdrop-filter: blur(8px);
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
       display: flex; align-items: center; justify-content: center;
-      box-shadow: var(--shadow-sm);
+      box-shadow: var(--shadow-md);
+      z-index: 3;
+      transform: translateZ(28px);
+      border: 1px solid rgba(255, 255, 255, 0.8);
     }
     .recipe-card .saved-marker svg {
-      width: 15px; height: 15px;
+      width: 17px; height: 17px;
       stroke: var(--c-primary);
       fill: var(--c-primary);
       stroke-width: 1.5;
@@ -67,21 +79,36 @@
     /* Explore section */
     .explore-more {
       background: var(--gradient-hero);
-      border-radius: var(--r-xl);
-      padding: 48px 40px;
+      border-radius: var(--r-2xl);
+      padding: clamp(48px, 6vw, 64px) clamp(24px, 5vw, 48px);
       text-align: center;
-      border: 1.5px solid var(--c-border);
+      border: 1.5px solid var(--c-card-border);
+      box-shadow: var(--shadow-card);
+      position: relative;
+      overflow: hidden;
     }
     .explore-more h2 {
-      font-size: 1.6rem; font-weight: 900;
-      letter-spacing: -0.04em; color: var(--c-text);
-      margin: 0 0 10px;
+      font-size: clamp(1.8rem, 3.5vw, 2.3rem);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      color: var(--c-text);
+      margin: 0 0 12px;
     }
     .explore-more p {
-      font-size: 15px; color: var(--c-muted);
-      margin: 0 0 24px; line-height: 1.6;
+      font-size: 16px;
+      color: var(--c-muted);
+      margin: 0 0 28px;
+      line-height: 1.68;
+      max-width: 520px;
+      margin-inline: auto;
+      margin-bottom: 28px;
     }
-    .explore-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .explore-actions {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
   </style>
 </head>
 <body>
@@ -235,7 +262,7 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="app.js"></script>
+<script src="app.js?v=4"></script>
 <script>
   initPage('saved');
 
@@ -277,6 +304,7 @@
       });
     }, { threshold: 0.08 });
     grid.querySelectorAll('.recipe-card').forEach(card => observer.observe(card));
+    init3DTilt();
   }
 
   /* ── Clear all ── */

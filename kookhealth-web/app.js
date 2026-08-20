@@ -1,6 +1,6 @@
 /* ============================================================
    KOOKHEALTH — SHARED APP.JS
-   Recipe data, theme management, saved recipes, nav utilities
+   Recipe data, theme management, saved recipes, 3D tilt & nav utilities
    ============================================================ */
 
 /* ── RECIPE DATA ──────────────────────────────────────── */
@@ -14,13 +14,13 @@ const RECIPES = {
     prep: '5m', cook: '10m', serve: '2', cal: '320',
     rating: '4.9', reviews: '342',
     ingredients: [
-      { name: 'Sourdough bread',   amount: '2 slices' },
-      { name: 'Ripe avocado',      amount: '1 large'  },
-      { name: 'Free-range eggs',   amount: '2'        },
-      { name: 'White vinegar',     amount: '1 tbsp'   },
-      { name: 'Lemon juice',       amount: '1 tsp'    },
-      { name: 'Red chili flakes',  amount: 'pinch'    },
-      { name: 'Fresh dill',        amount: 'garnish'  },
+      { name: 'Sourdough bread', amount: '2 slices' },
+      { name: 'Ripe avocado', amount: '1 large' },
+      { name: 'Free-range eggs', amount: '2' },
+      { name: 'White vinegar', amount: '1 tbsp' },
+      { name: 'Lemon juice', amount: '1 tsp' },
+      { name: 'Red chili flakes', amount: 'pinch' },
+      { name: 'Fresh dill', amount: 'garnish' },
       { name: 'Sea salt & pepper', amount: 'to taste' },
     ],
     steps: [
@@ -40,14 +40,14 @@ const RECIPES = {
     prep: '5m', cook: '15m', serve: '2', cal: '410',
     rating: '4.8', reviews: '124',
     ingredients: [
-      { name: 'Large eggs',        amount: '4'        },
-      { name: 'Whole milk',        amount: '2 tbsp'   },
-      { name: 'Unsalted butter',   amount: '1 tbsp'   },
-      { name: 'Feta cheese',       amount: '30g'      },
-      { name: 'Cherry tomatoes',   amount: '6'        },
-      { name: 'Fresh chives',      amount: 'garnish'  },
+      { name: 'Large eggs', amount: '4' },
+      { name: 'Whole milk', amount: '2 tbsp' },
+      { name: 'Unsalted butter', amount: '1 tbsp' },
+      { name: 'Feta cheese', amount: '30g' },
+      { name: 'Cherry tomatoes', amount: '6' },
+      { name: 'Fresh chives', amount: 'garnish' },
       { name: 'Whole grain toast', amount: '2 slices' },
-      { name: 'Salt & pepper',     amount: 'to taste' },
+      { name: 'Salt & pepper', amount: 'to taste' },
     ],
     steps: [
       'Whisk eggs with milk, salt, and pepper in a bowl until pale and airy — at least 60 seconds.',
@@ -66,15 +66,15 @@ const RECIPES = {
     prep: '10m', cook: '15m', serve: '2', cal: '480',
     rating: '4.9', reviews: '267',
     ingredients: [
-      { name: 'Quinoa, cooked',    amount: '1 cup'   },
-      { name: 'Chickpeas, drained',amount: '1 can'   },
-      { name: 'Ripe avocado',      amount: '1'       },
-      { name: 'Cherry tomatoes',   amount: '1 cup'   },
-      { name: 'Cucumber',          amount: '½'       },
-      { name: 'Red cabbage',       amount: '¼ head'  },
-      { name: 'Tahini',            amount: '3 tbsp'  },
-      { name: 'Lemon juice',       amount: '2 tbsp'  },
-      { name: 'Black sesame seeds',amount: '1 tsp'   },
+      { name: 'Quinoa, cooked', amount: '1 cup' },
+      { name: 'Chickpeas, drained', amount: '1 can' },
+      { name: 'Ripe avocado', amount: '1' },
+      { name: 'Cherry tomatoes', amount: '1 cup' },
+      { name: 'Cucumber', amount: '½' },
+      { name: 'Red cabbage', amount: '¼ head' },
+      { name: 'Tahini', amount: '3 tbsp' },
+      { name: 'Lemon juice', amount: '2 tbsp' },
+      { name: 'Black sesame seeds', amount: '1 tsp' },
     ],
     steps: [
       'Cook quinoa per package directions. Fluff with a fork and let cool slightly.',
@@ -94,13 +94,13 @@ const RECIPES = {
     rating: '4.7', reviews: '98',
     ingredients: [
       { name: 'Frozen mixed berries', amount: '1½ cups' },
-      { name: 'Frozen banana',        amount: '½'       },
-      { name: 'Coconut milk',         amount: '¼ cup'   },
-      { name: 'Granola',              amount: '¼ cup'   },
-      { name: 'Fresh strawberries',   amount: '4'       },
-      { name: 'Fresh blueberries',    amount: '2 tbsp'  },
-      { name: 'Chia seeds',           amount: '1 tsp'   },
-      { name: 'Mint leaves',          amount: 'garnish' },
+      { name: 'Frozen banana', amount: '½' },
+      { name: 'Coconut milk', amount: '¼ cup' },
+      { name: 'Granola', amount: '¼ cup' },
+      { name: 'Fresh strawberries', amount: '4' },
+      { name: 'Fresh blueberries', amount: '2 tbsp' },
+      { name: 'Chia seeds', amount: '1 tsp' },
+      { name: 'Mint leaves', amount: 'garnish' },
     ],
     steps: [
       'Blend frozen berries and banana with just enough coconut milk to blend — keep it very thick!',
@@ -119,14 +119,14 @@ const RECIPES = {
     prep: '5m', cook: '30m', serve: '4', cal: '520',
     rating: '4.6', reviews: '183',
     ingredients: [
-      { name: 'Pappardelle pasta',      amount: '320g'  },
-      { name: 'San Marzano tomatoes',   amount: '1 can' },
-      { name: 'Garlic cloves',          amount: '4'     },
-      { name: 'Extra virgin olive oil', amount: '3 tbsp'},
-      { name: 'Fresh basil',            amount: '1 bunch'},
-      { name: 'Parmesan, shaved',       amount: '40g'   },
-      { name: 'Dry white wine',         amount: '¼ cup' },
-      { name: 'Chili flakes',           amount: '½ tsp' },
+      { name: 'Pappardelle pasta', amount: '320g' },
+      { name: 'San Marzano tomatoes', amount: '1 can' },
+      { name: 'Garlic cloves', amount: '4' },
+      { name: 'Extra virgin olive oil', amount: '3 tbsp' },
+      { name: 'Fresh basil', amount: '1 bunch' },
+      { name: 'Parmesan, shaved', amount: '40g' },
+      { name: 'Dry white wine', amount: '¼ cup' },
+      { name: 'Chili flakes', amount: '½ tsp' },
     ],
     steps: [
       'Warm olive oil over medium-low heat. Add sliced garlic and chili flakes — cook until fragrant, about 2 minutes. Do not brown.',
@@ -145,13 +145,13 @@ const RECIPES = {
     prep: '10m', cook: '15m', serve: '2', cal: '360',
     rating: '4.8', reviews: '211',
     ingredients: [
-      { name: 'Chicken breast',           amount: '300g'  },
-      { name: 'Romaine lettuce',          amount: '1 head'},
-      { name: 'Cherry tomatoes',          amount: '1 cup' },
-      { name: 'Cucumber',                 amount: '1'     },
-      { name: 'Red onion',                amount: '½'     },
-      { name: 'Feta cheese',              amount: '80g'   },
-      { name: 'Kalamata olives',          amount: '½ cup' },
+      { name: 'Chicken breast', amount: '300g' },
+      { name: 'Romaine lettuce', amount: '1 head' },
+      { name: 'Cherry tomatoes', amount: '1 cup' },
+      { name: 'Cucumber', amount: '1' },
+      { name: 'Red onion', amount: '½' },
+      { name: 'Feta cheese', amount: '80g' },
+      { name: 'Kalamata olives', amount: '½ cup' },
       { name: 'Lemon & olive oil dressing', amount: '3 tbsp' },
     ],
     steps: [
@@ -164,7 +164,7 @@ const RECIPES = {
   },
 };
 
-/* ── THEME ────────────────────────────────────────────── */
+/* ── THEME MANAGEMENT ─────────────────────────────────── */
 const THEME_KEY = 'kookhealth-theme';
 
 function getTheme() {
@@ -186,7 +186,7 @@ function toggleTheme() {
   const next = current === 'earthy' ? 'warm' : 'earthy';
   localStorage.setItem(THEME_KEY, next);
   applyTheme(next);
-  showToast(next === 'earthy' ? '🍃 Earthy mode on' : '🌅 Warm mode on');
+  showToast(next === 'earthy' ? '🍃 Earthy mode activated' : '🌅 Warm mode activated', next === 'earthy' ? '🌿' : '✨');
 }
 
 /* ── SAVED RECIPES ────────────────────────────────────── */
@@ -199,7 +199,10 @@ function getSavedIds() {
 
 function saveRecipeId(id) {
   const ids = getSavedIds();
-  if (!ids.includes(id)) { ids.push(id); localStorage.setItem(SAVED_KEY, JSON.stringify(ids)); }
+  if (!ids.includes(id)) {
+    ids.push(id);
+    localStorage.setItem(SAVED_KEY, JSON.stringify(ids));
+  }
 }
 
 function unsaveRecipeId(id) {
@@ -207,7 +210,9 @@ function unsaveRecipeId(id) {
   localStorage.setItem(SAVED_KEY, JSON.stringify(ids));
 }
 
-function isRecipeSaved(id) { return getSavedIds().includes(id); }
+function isRecipeSaved(id) {
+  return getSavedIds().includes(id);
+}
 
 function getSavedRecipes() {
   return getSavedIds().map(id => RECIPES[id]).filter(Boolean);
@@ -223,7 +228,7 @@ function updateNavBadge() {
   });
 }
 
-/* ── TOAST ────────────────────────────────────────────── */
+/* ── TOAST NOTIFICATIONS ──────────────────────────────── */
 let _toastTimer = null;
 function showToast(msg, icon = '') {
   let toast = document.getElementById('toast');
@@ -233,10 +238,10 @@ function showToast(msg, icon = '') {
     toast.className = 'toast';
     document.body.appendChild(toast);
   }
-  toast.innerHTML = (icon ? `<span>${icon}</span>` : '') + `<span>${msg}</span>`;
+  toast.innerHTML = (icon ? `<span style="font-size:16px;">${icon}</span>` : '') + `<span>${msg}</span>`;
   toast.classList.add('show');
   if (_toastTimer) clearTimeout(_toastTimer);
-  _toastTimer = setTimeout(() => toast.classList.remove('show'), 2600);
+  _toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
 }
 
 /* ── ACTIVE NAV LINK ──────────────────────────────────── */
@@ -246,7 +251,7 @@ function setActiveNav(page) {
   });
 }
 
-/* ── HAMBURGER ────────────────────────────────────────── */
+/* ── HAMBURGER & MOBILE MENU ──────────────────────────── */
 function initHamburger() {
   const burger = document.getElementById('hamburger');
   const mobileNav = document.getElementById('mobile-nav');
@@ -259,6 +264,7 @@ function initHamburger() {
   document.addEventListener('click', e => {
     if (!burger.contains(e.target) && !mobileNav.contains(e.target)) {
       mobileNav.classList.remove('open');
+      burger.setAttribute('aria-expanded', 'false');
     }
   });
 }
@@ -266,20 +272,23 @@ function initHamburger() {
 /* ── INIT PAGE ────────────────────────────────────────── */
 function initPage(page) {
   applyTheme(getTheme());
-  setActiveNav(page);
+  if (page) setActiveNav(page);
   updateNavBadge();
   const themeToggle = document.getElementById('theme-toggle');
   if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
   initHamburger();
-  // Visual enhancements (deferred so DOM is ready)
-  requestAnimationFrame(initVisuals);
+  // Visual enhancements & 3D tilt
+  requestAnimationFrame(() => {
+    initVisuals();
+    init3DTilt();
+  });
 }
 
 /* ── RECIPE CARD HTML ─────────────────────────────────── */
 function recipeCardHTML(recipe, fromPage = 'home') {
   return `
     <a href="recipe.html?id=${recipe.id}&from=${fromPage}"
-       class="recipe-card"
+       class="recipe-card tilt-card"
        aria-label="${recipe.title}, ${recipe.cook} cook time">
       <div class="recipe-card-img">
         <img src="${recipe.img}" alt="${recipe.alt}" loading="lazy" />
@@ -310,10 +319,10 @@ function getParam(name) {
   return new URLSearchParams(window.location.search).get(name);
 }
 
-/* ── VISUAL ENHANCEMENTS ──────────────────────────────── */
+/* ── VISUAL ENHANCEMENTS (Blobs & Particles) ───────────── */
 function initVisuals() {
   const hero = document.querySelector('.hero, .page-hero');
-  if (hero) {
+  if (hero && !hero.querySelector('.blob-bg')) {
     createBlobBg(hero);
     createFoodParticles(hero);
   }
@@ -321,9 +330,9 @@ function initVisuals() {
 
 function createBlobBg(container) {
   const specs = [
-    { pct: 0, x: '4%',  y: '-15%', size: 480 },
-    { pct: 1, x: '62%', y: '8%',   size: 400 },
-    { pct: 0, x: '38%', y: '52%',  size: 340 },
+    { pct: 0, x: '2%', y: '-20%', size: 520 },
+    { pct: 1, x: '65%', y: '5%', size: 440 },
+    { pct: 0, x: '35%', y: '55%', size: 380 },
   ];
   specs.forEach((s, i) => {
     const el = document.createElement('div');
@@ -331,11 +340,11 @@ function createBlobBg(container) {
     Object.assign(el.style, {
       background: i % 2 === 0 ? 'var(--c-primary)' : 'var(--c-accent)',
       left: s.x,
-      top:  s.y,
-      width:  s.size + 'px',
+      top: s.y,
+      width: s.size + 'px',
       height: s.size + 'px',
-      animationDelay: `-${i * 5}s`,
-      animationDuration: `${14 + i * 3}s`,
+      animationDelay: `-${i * 6}s`,
+      animationDuration: `${16 + i * 4}s`,
     });
     container.appendChild(el);
   });
@@ -345,20 +354,72 @@ function createFoodParticles(container, count = 14) {
   const wrap = document.createElement('div');
   wrap.className = 'food-particles-wrap';
   wrap.setAttribute('aria-hidden', 'true');
-  const foods = ['🍕','🥑','🍅','🥦','🌿','🍋','🫑','🥕','🌽','🍓','🫒','🧄','🥗','🍳'];
+  const foods = ['🥑', '🍅', '🥦', '🌿', '🍋', '🫑', '🥕', '🌽', '🍓', '🫒', '🧄', '🥗', '🍳', '🥞'];
   for (let i = 0; i < count; i++) {
     const el = document.createElement('div');
     el.className = 'food-particle';
     el.textContent = foods[i % foods.length];
-    const duration = 11 + Math.random() * 12;
+    const duration = 12 + Math.random() * 12;
     Object.assign(el.style, {
-      left: `${6 + (i / count) * 88}%`,
-      fontSize: `${13 + Math.random() * 9}px`,
-      opacity:  String(0.045 + Math.random() * 0.065),
-      animationDelay:    `-${(Math.random() * duration).toFixed(1)}s`,
+      left: `${5 + (i / count) * 90}%`,
+      fontSize: `${14 + Math.random() * 10}px`,
+      opacity: String(0.04 + Math.random() * 0.06),
+      animationDelay: `-${(Math.random() * duration).toFixed(1)}s`,
       animationDuration: `${duration.toFixed(1)}s`,
     });
     wrap.appendChild(el);
   }
   container.appendChild(wrap);
+}
+
+/* ── 3D TILT & SPECULAR SHEEN PHYSICS ─────────────────── */
+function init3DTilt() {
+  if (typeof window === 'undefined') return;
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReducedMotion) return;
+
+  const tiltCards = document.querySelectorAll('.tilt-card, .recipe-card, .nutrient-card, .hero-image-wrap, .upload-zone');
+  tiltCards.forEach(card => {
+    if (card._tiltAttached) return;
+    card._tiltAttached = true;
+
+    // Inject 3D specular shine layer if not already present
+    if (!card.querySelector('.card-shine')) {
+      const shine = document.createElement('div');
+      shine.className = 'card-shine';
+      shine.setAttribute('aria-hidden', 'true');
+      card.appendChild(shine);
+    }
+
+    let rafId = null;
+
+    card.addEventListener('mouseenter', () => {
+      card.style.transition = 'transform 0.12s ease-out, box-shadow 0.12s ease-out';
+    });
+
+    card.addEventListener('mousemove', e => {
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        const rect = card.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+        const normX = (mouseX / rect.width) - 0.5; // -0.5 to 0.5
+        const normY = (mouseY / rect.height) - 0.5; // -0.5 to 0.5
+
+        const maxRotate = 14; // degrees of 3D tilt
+        const rotX = -normY * maxRotate;
+        const rotY = normX * maxRotate;
+
+        card.style.transform = `perspective(1100px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) translateZ(16px) translateY(-10px) scale3d(1.025, 1.025, 1.025)`;
+        card.style.setProperty('--mouse-x', `${((normX + 0.5) * 100).toFixed(1)}%`);
+        card.style.setProperty('--mouse-y', `${((normY + 0.5) * 100).toFixed(1)}%`);
+      });
+    });
+
+    card.addEventListener('mouseleave', () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      card.style.transition = 'transform 0.55s cubic-bezier(0.34, 1.35, 0.64, 1), box-shadow 0.55s cubic-bezier(0.34, 1.35, 0.64, 1)';
+      card.style.transform = 'perspective(1100px) rotateX(0deg) rotateY(0deg) translateZ(0) translateY(0) scale3d(1, 1, 1)';
+    });
+  });
 }

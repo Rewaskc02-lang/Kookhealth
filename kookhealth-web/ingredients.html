@@ -7,34 +7,12 @@
   <meta name="description" content="Tell us what ingredients you have and we'll find the perfect healthy recipes for you. No waste, no shopping trips." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=4" />
   <style>
-    .ing-empty { color: var(--c-light); font-size: 14px; font-style: italic; }
+    .ing-empty { color: var(--c-muted-l); font-size: 14px; font-style: italic; }
     .find-btn-wrap { text-align: center; margin-top: 36px; }
-    .find-btn-wrap .btn { min-width: 240px; }
-    .ing-count {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 22px; height: 22px;
-      background: white; color: var(--c-primary);
-      border-radius: 50%; font-size: 12px; font-weight: 800;
-      margin-left: 2px;
-    }
-    .suggested-chip {
-      display: flex; align-items: center; justify-content: center;
-      gap: 6px; padding: 10px 14px;
-      background: var(--c-surf);
-      border: 1.5px solid var(--c-border);
-      border-radius: var(--r-md);
-      font-size: 13px; font-weight: 700;
-      color: var(--c-text);
-      cursor: pointer;
-      transition: all 0.2s ease !important;
-    }
-    .suggested-chip:hover { border-color: var(--c-primary); background: var(--c-primary-l); color: var(--c-primary); }
-    .suggested-chip.added { background: var(--c-tag-bg); border-color: var(--c-primary); color: var(--c-primary); }
-    .suggested-chip .chip-em { font-size: 18px; }
-
+    .find-btn-wrap .btn { min-width: 260px; }
     .results-section { display: none; margin-top: 56px; }
     .results-section.show { display: block; }
     .results-divider {
@@ -51,8 +29,8 @@
     .results-divider span {
       position: relative;
       background: var(--c-bg);
-      padding: 0 20px;
-      font-size: 14px; font-weight: 700;
+      padding: 0 24px;
+      font-size: 15px; font-weight: 800;
       color: var(--c-muted);
     }
   </style>
@@ -230,7 +208,7 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="app.js"></script>
+<script src="app.js?v=4"></script>
 <script>
   initPage('ingredients');
 
@@ -285,8 +263,12 @@
   function removeIngredient(name) {
     addedIngredients = addedIngredients.filter(i => i !== name);
     // Unmark suggested chip if present
-    suggestedGrid.querySelectorAll('.suggested-chip').forEach(chip => {
-      if (chip.dataset.name === name) chip.classList.remove('added');
+    suggestedGrid.querySelectorAll('.quick-chip').forEach(chip => {
+      if (chip.dataset.name === name) {
+        chip.style.background = '';
+        chip.style.borderColor = '';
+        chip.style.color = '';
+      }
     });
     renderTags();
     updateFindBtn();
